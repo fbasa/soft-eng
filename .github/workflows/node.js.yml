@@ -45,5 +45,8 @@ jobs:
       run: cp "${{ steps.dist.outputs.dir }}/index.html" "${{ steps.dist.outputs.dir }}/404.html"
     - name: Deploy to GitHub Pages
       uses: crazy-max/ghaction-github-pages@v4.2.0
+      with:
+         # Build directory to deploy
+        build_dir: /app
 
           
