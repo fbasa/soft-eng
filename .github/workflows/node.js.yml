@@ -44,9 +44,6 @@ jobs:
     - name: Add SPA fallback (404 -> index.html)
       run: cp "${{ steps.dist.outputs.dir }}/index.html" "${{ steps.dist.outputs.dir }}/404.html"
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ${{ steps.dist.outputs.dir }}
-          # cname: your.custom.domain   # <- uncomment if you use a custom domain
+      uses: crazy-max/ghaction-github-pages@v4.2.0
+
+          
