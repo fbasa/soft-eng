@@ -41,13 +41,12 @@ jobs:
           fi
           echo "dir=$DIR" >> "$GITHUB_OUTPUT"
           
-    - name: Add SPA fallback (404 -> index.html)
-      run: cp "${{ steps.dist.outputs.dir }}/index.html" "${{ steps.dist.outputs.dir }}/404.html"
     - name: Deploy to GitHub Pages
-      uses: crazy-max/ghaction-github-pages@v4.2.0
+      uses: peaceiris/actions-gh-pages@v4
       with:
-         # Build directory to deploy
-        build_dir: /
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: ${{ steps.dist.outputs.dir }}
+        
 
           
