@@ -48,5 +48,6 @@ jobs:
       with:
          # Build directory to deploy
         build_dir: /
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
           
