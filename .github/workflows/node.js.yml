@@ -29,3 +29,24 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     #- run: npm test
+    
+    - name: Locate build output
+      id: dist
+      shell: bash
+      run: |
+          # Angular 17+ defaults to dist/<app>/browser; older: dist/<app>
+          DIR=$(find dist -type d -name browser -print -quit)
+          if [ -z "$DIR" ]; then
+            DIR=$(find dist -mindepth 1 -maxdepth 1 -type d -print -quit || echo dist)
+          fi
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+          
+    - name: Add SPA fallback (404 -> index.html)
+      run: cp "${{ steps.dist.outputs.dir }}/index.html" "${{ steps.dist.outputs.dir }}/404.html"
+    - name: Deploy to GitHub Pages
+    uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ${{ steps.dist.outputs.dir }}
+          # cname: your.custom.domain   # <- uncomment if you use a custom domain
