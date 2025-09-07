@@ -8,7 +8,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('CS305-web');
+  protected readonly title = signal('CS305 Software Engineering');
   //modified by Kinley
   //Modified by Kristel
   //Modified by Kristel1
