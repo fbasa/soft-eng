@@ -2,10 +2,9 @@ name: Deploy Angular to GitHub Pages
 
 on:
   push:
-    branches: [ dev ]       # change if your default branch is different
+    branches: [ main ]
   workflow_dispatch:
 
-# Required for GitHub Pages deployment
 permissions:
   contents: read
   pages: write
@@ -19,49 +18,42 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
 
-      # Build with a base href that matches project pages:
-      # https://<user>.github.io/<repo>/
-      # For user/org pages (e.g. <user>.github.io), set BASE_HREF to "/"
+      # For project pages use "/<repo>/".
+      # If your repo is named <user>.github.io or you use a custom domain, set "/" instead.
       - name: Build Angular
         env:
           BASE_HREF: "/${{ github.event.repository.name }}/"
         run: |
-          echo "Using base-href: $BASE_HREF"
           npx ng version
           npx ng build --configuration=production --base-href "$BASE_HREF"
 
-      # Resolve dist path across Angular versions/layouts
-      - name: Resolve dist path
+      # 👇 Pin to your actual build folder
+      - name: Set deploy dir
         id: dist
-        run: |
-          OUT_DIR=$(node -e "let p=require('./angular.json'); let n=Object.keys(p.projects)[0]; let o=(p.projects[n].architect?.build?.options?.outputPath || p.projects[n].targets?.build?.options?.outputPath || 'dist'); process.stdout.write(o);")
-          if [ -d "$OUT_DIR/browser" ]; then
-            DEPLOY_DIR="$OUT_DIR/browser"
-          else
-            DEPLOY_DIR="$OUT_DIR"
-          fi
-          echo "path=$DEPLOY_DIR" >> "$GITHUB_OUTPUT"
+        run: echo "path=dist/CS305-web/browser" >> "$GITHUB_OUTPUT"
 
-      # SPA routing support + disable Jekyll
-      #- name: Prepare static site extras
+      #- name: SPA extras
         #run: |
           #touch "${{ steps.dist.outputs.path }}/.nojekyll"
           #cp "${{ steps.dist.outputs.path }}/index.html" "${{ steps.dist.outputs.path }}/404.html"
+          #if [ -f CNAME ]; then cp CNAME "${{ steps.dist.outputs.path }}/CNAME"; fi
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Debug listing
+        run: |
+          echo "Deploying these files:"
+          (cd "${{ steps.dist.outputs.path }}" && find . -maxdepth 2 -print)
+
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ steps.dist.outputs.path }}
 
@@ -72,6 +64,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
