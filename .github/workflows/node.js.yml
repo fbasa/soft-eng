@@ -1,66 +1,77 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: Deploy Angular to GitHub Pages
 
 on:
   push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "dev" ]
+    branches: [ dev ]       # change if your default branch is different
+  workflow_dispatch:
+
+# Required for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm run test:ci
-    
-    - name: Locate build output
-      id: dist
-      shell: bash
-      run: |
-          # Angular 17+ defaults to dist/<app>/browser; older: dist/<app>
-          DIR=$(find dist -type d -name browser -print -quit)
-          if [ -z "$DIR" ]; then
-            DIR=$(find dist -mindepth 1 -maxdepth 1 -type d -print -quit || echo dist)
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Build with a base href that matches project pages:
+      # https://<user>.github.io/<repo>/
+      # For user/org pages (e.g. <user>.github.io), set BASE_HREF to "/"
+      - name: Build Angular
+        env:
+          BASE_HREF: "/${{ github.event.repository.name }}/"
+        run: |
+          echo "Using base-href: $BASE_HREF"
+          npx ng version
+          npx ng build --configuration=production --base-href "$BASE_HREF"
+
+      # Resolve dist path across Angular versions/layouts
+      - name: Resolve dist path
+        id: dist
+        run: |
+          OUT_DIR=$(node -e "let p=require('./angular.json'); let n=Object.keys(p.projects)[0]; let o=(p.projects[n].architect?.build?.options?.outputPath || p.projects[n].targets?.build?.options?.outputPath || 'dist'); process.stdout.write(o);")
+          if [ -d "$OUT_DIR/browser" ]; then
+            DEPLOY_DIR="$OUT_DIR/browser"
+          else
+            DEPLOY_DIR="$OUT_DIR"
           fi
-          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
-          
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: ${{ steps.dist.outputs.dir }}
+          echo "path=$DEPLOY_DIR" >> "$GITHUB_OUTPUT"
 
+      # SPA routing support + disable Jekyll
+      - name: Prepare static site extras
+        run: |
+          touch "${{ steps.dist.outputs.path }}/.nojekyll"
+          cp "${{ steps.dist.outputs.path }}/index.html" "${{ steps.dist.outputs.path }}/404.html"
 
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ steps.dist.outputs.path }}
 
-  # Deployment job
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        
-
-          
