@@ -55,10 +55,10 @@ jobs:
           echo "path=$DEPLOY_DIR" >> "$GITHUB_OUTPUT"
 
       # SPA routing support + disable Jekyll
-      - name: Prepare static site extras
-        run: |
-          touch "${{ steps.dist.outputs.path }}/.nojekyll"
-          cp "${{ steps.dist.outputs.path }}/index.html" "${{ steps.dist.outputs.path }}/404.html"
+      #- name: Prepare static site extras
+        #run: |
+          #touch "${{ steps.dist.outputs.path }}/.nojekyll"
+          #cp "${{ steps.dist.outputs.path }}/index.html" "${{ steps.dist.outputs.path }}/404.html"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
