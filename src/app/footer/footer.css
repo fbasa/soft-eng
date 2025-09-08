@@ -1,27 +1,11 @@
-footer {
-  background-color: #f4f4f4;  
-  padding: 20px 0;            
-  position: relative;        
-  text-align: center;      
-}
-
-.footer-content {
-  max-width: 800px;         
-  margin: 0 auto;            
-}
-
-.footer-content p {
-  margin: 0 0 10px;         
+.footer {
+  text-align: right;     
+  padding: 10px 20px;
   font-size: 14px;
+  background: #f4f4f4;    
   color: #333;
-}
-
-.footer-content nav a {
-  text-decoration: none;
-  color: #007acc;
-  margin: 0 10px;           
-}
-
-.footer-content nav a:hover {
-  text-decoration: underline;
+  position: fixed;       
+  bottom: 0;
+  right: 0;
+  width: 100%;           
 }
