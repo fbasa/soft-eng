@@ -33,7 +33,8 @@ jobs:
       # If your repo is named <user>.github.io or you use a custom domain, set "/" instead.
       - name: Build Angular
         env:
-          BASE_HREF: "/${{ github.event.repository.name }}/"
+          BASE_HREF: "/soft-eng/"
+          #BASE_HREF: "/${{ github.event.repository.name }}/"
         run: |
           npx ng version
           npx ng build --configuration=production --base-href "$BASE_HREF"
