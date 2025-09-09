@@ -41,7 +41,15 @@ jobs:
       # 👇 Pin to your actual build folder
       - name: Set deploy dir
         id: dist
-        run: echo "path=dist/soft-eng/browser" >> "$GITHUB_OUTPUT"
+        shell: bash
+        run: |
+          # Angular 17+ defaults to dist/<app>/browser; older: dist/<app>
+          DIR=$(find dist -type d -name browser -print -quit)
+          if [ -z "$DIR" ]; then
+            DIR=$(find dist -mindepth 1 -maxdepth 1 -type d -print -quit || echo dist)
+          fi
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+        #run: echo "path=dist/soft-eng/browser" >> "$GITHUB_OUTPUT"
 
       #- name: SPA extras
         #run: |
