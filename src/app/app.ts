@@ -15,4 +15,5 @@ export class App {
   //modified by Kinley
   //Modified by Kristel
   //Modified by Kristel1
+  //Uploaded by Isaac (CS305-3)
 }
