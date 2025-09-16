@@ -17,12 +17,12 @@
   <div class="spinner-overlay" *ngIf="loading">
     <p-progress-spinner animationDuration=".5s" [style]="{width: '50px', height: '50px'}"/>
   </div>
-    <p-table *ngIf="!loading" [value]="filteredStudents" [paginator]="true" [rows]="5" [showCurrentPageReport]="true">
+    <p-table *ngIf="!loading" [value]="filteredStudents" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" sortMode="single">
     <ng-template pTemplate="header">
       <tr>
-        <th>Name</th>
-        <th>Date of Birth</th>
-        <th>Gender</th>
+        <th pSortableColumn="firstName">Name <p-sortIcon field="firstName"></p-sortIcon></th>
+        <th pSortableColumn="dob">Date of Birth <p-sortIcon field="dob"></p-sortIcon></th>
+        <th pSortableColumn="gender">Gender <p-sortIcon field="gender"></p-sortIcon></th>
         <th>Program</th>
         <th>School Year</th>
         <th>Year & Semester</th>

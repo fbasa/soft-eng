@@ -162,4 +162,16 @@ export class Studentlist implements OnInit {
       }
     })
   }
+  sortStudents(by: keyof Student, order: 'asc' | 'desc' = 'asc') //Sorting
+  {
+  this.filteredStudents.sort((a, b) => 
+    {
+    const valueA = (a[by] ?? '').toString().toLowerCase();
+    const valueB = (b[by] ?? '').toString().toLowerCase();
+
+    if (valueA < valueB) return order === 'asc' ? -1 : 1;
+    if (valueA > valueB) return order === 'asc' ? 1 : -1;
+    return 0;
+    });
+  }
 }
