@@ -1,0 +1,17 @@
+.sideBar {
+    border-radius: 10px;
+    background: gray;
+    color:white;
+    width: 150px;
+    height: 100vh;
+    padding: 10px;
+}
+li {
+    font-size: 18px;
+    padding-bottom: 5px;
+}
+
+
+.sideBar.collapsed {
+    max-width: 70px;
+}
