@@ -1,0 +1,23 @@
+.sideBar {
+    border-radius: 25px;
+    width: 150px;
+    min-height: 100vh;
+    background: rgb(1, 1, 61);
+    color: white;
+    padding: 1rem;
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+.sideBar.collapsed {
+    width: 90px;
+}
+li {
+    font-size: 18px;
+    padding-bottom: 5px;
+}
+button{
+    padding: auto;
+    background: gold;
+    border-radius: 5px;
+    
+}
