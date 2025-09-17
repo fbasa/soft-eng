@@ -1,7 +1,8 @@
 <div class="sideBar" [class.collapsed]="!isOpen">
-    <button (click)="toggleSideBar()">
-        {{isOpen ? 'Collapse':'Expand'}}
-    </button>
+    <div class="sidebar" [class.collapsed]="isOpen">
+  <button (click)="toggleSideBar()">
+    {{ isOpen ? '◀' : '▶' }}
+  </button>
 
     <ul>
         <li *ngIf="isOpen">Page 1</li>
