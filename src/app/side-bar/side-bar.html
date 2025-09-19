@@ -1,0 +1,11 @@
+<div class="sideBar" [class.collapsed]="!isOpen">
+  <button class="sideBar_button" (click)="toggleSideBar()">
+    {{ isOpen ? '◀' : '▶' }}
+  </button>
+
+    <ul>
+        <li *ngIf="isOpen">Page 1</li>
+        <li *ngIf="isOpen">Page 2</li>
+        <li *ngIf="isOpen">Page 3</li>
+    </ul>
+</div>

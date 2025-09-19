@@ -1,0 +1,41 @@
+.sideBar {
+    position:relative;
+    width: 150px;
+    min-height: 100vh;
+    background: rgb(1, 1, 61);
+    color: white;
+    padding: 1rem;
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+.sideBar.collapsed {
+    width: 90px;
+}
+.sideBar_button {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    background:none;
+    color: white;
+    border:none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+}
+.sideBar_button:hover{
+    color:yellow;
+
+}
+.sideBar_button:active{
+    color:yellowgreen;
+}
+li {
+    font-size: 18px;
+    padding-bottom: 5px;
+}
+button{
+    padding: auto;
+    background: gold;
+    border-radius: 5px;
+    
+}

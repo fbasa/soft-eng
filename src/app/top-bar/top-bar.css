@@ -1,0 +1,33 @@
+
+.topbar {
+  background-color: rgb(1, 1, 61);
+  color: white;
+  padding: 15px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 60px;
+  
+}
+.logo-section {
+  position: absolute;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.text-section {
+  text-align: center;
+  flex-grow: 1;
+}
+.logo {
+  height: 50px;
+  width: auto;
+}
+.app-name {
+  font-size: 20px;
+  font-weight: normal;
+}
