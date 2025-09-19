@@ -4,8 +4,9 @@
     flex-direction: column;
     gap: 24px;
     width: 280px;
-    min-height: 90%;    
-    height: 90%;
+    /* min-height: 90%;    
+    height: 90%; */
+    height: 71vh;
     background: linear-gradient(195deg, #050a30 0%, #0f1f59 52%, #1b2d63 100%);
     color: #e8ecff;
     padding: 72px 24px 28px;
@@ -19,8 +20,9 @@
     width: 80px;
     padding: 72px 14px 24px;
     border-radius: 32px;
-    min-height: 90%;
-    height: 90%;
+    /* min-height: 90%;
+    height: 90%; */
+    height: 71vh;
 }
 
 .sideBar_toggle {
