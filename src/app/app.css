@@ -144,7 +144,8 @@
 .app-outlet {
   flex: 1 1 auto;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
+  height: 400px;
 }
 
 .outlet-surface {
@@ -161,7 +162,7 @@
   align-items: stretch;
   justify-content: flex-start;
   box-sizing: border-box;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .app-footer {
@@ -257,10 +258,15 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  align-items: flex-start;
   width: 100%;
-  flex: 1 0 auto;
-  min-height: 100%;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
   box-sizing: border-box;
+  overflow: auto;
 }
 
+.outlet-content > * {
+  flex: 0 0 auto;
+  width: 100%;
+}

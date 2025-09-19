@@ -43,7 +43,7 @@
 }
 
 .sideBar.collapsed .sideBar_toggle {
-    right: 32px;
+    right: 20px;
     justify-content: center;
     gap: 0;
     padding: 10px;
