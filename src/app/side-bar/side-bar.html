@@ -1,6 +1,5 @@
 <div class="sideBar" [class.collapsed]="!isOpen">
-    <div class="sidebar" [class.collapsed]="isOpen">
-  <button (click)="toggleSideBar()">
+  <button class="sideBar_button" (click)="toggleSideBar()">
     {{ isOpen ? '◀' : '▶' }}
   </button>
 
