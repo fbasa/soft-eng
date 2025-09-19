@@ -1,4 +1,4 @@
-﻿<div class="app-shell">
+<div class="app-shell">
   <header class="app-header">
     <app-top-bar></app-top-bar>
   </header>
@@ -32,6 +32,13 @@
 
       <section class="app-outlet">
         <div class="outlet-surface">
+          <p-button icon="pi pi-home" aria-label="Save" />
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-user"></i>
+            </p-inputgroup-addon>
+            <input pInputText [(ngModel)]="text1" placeholder="Username" />
+          </p-inputgroup>
           <router-outlet></router-outlet>
         </div>
       </section>
