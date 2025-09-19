@@ -47,12 +47,23 @@
   flex: 0 0 auto;
   display: flex;
   justify-content: flex-start;
+  align-self: stretch;
+  padding-top: 0;
+  padding-bottom: 24px;
 }
+
+
+
+
 
 .app-nav app-side-bar {
   display: flex;
   width: auto;
+  height: 100%;
 }
+
+
+
 
 .app-nav app-side-bar:not(.collapsed) {
   min-width: 280px;
@@ -188,6 +199,7 @@
     width: 100%;
     order: 2;
     justify-content: center;
+    padding-bottom: 0;
   }
 
   .app-nav app-side-bar,
@@ -195,6 +207,7 @@
   .app-nav app-side-bar:not(.collapsed) {
     width: 100%;
     min-width: 0;
+    height: auto;
   }
 
   .app-content {
@@ -219,3 +232,19 @@
     padding: 0 20px 20px;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
