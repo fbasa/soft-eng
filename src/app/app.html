@@ -1,4 +1,44 @@
-<app-top-bar></app-top-bar>
-<app-side-bar></app-side-bar>
-<app-footer class="footer"></app-footer>
-<router-outlet></router-outlet>
+﻿<div class="app-shell">
+  <header class="app-header">
+    <app-top-bar></app-top-bar>
+  </header>
+
+  <div class="app-body">
+    <aside class="app-nav">
+      <app-side-bar></app-side-bar>
+    </aside>
+
+    <main class="app-content">
+      <section class="app-intro">
+        <div class="intro-title">
+          <h1>{{ title() }}</h1>
+          <p>Plan, build, and collaborate with clarity across every project milestone.</p>
+        </div>
+        <div class="intro-highlights">
+          <article class="highlight-card">
+            <h2>Project Visibility</h2>
+            <p>Consolidated dashboards keep priorities, risks, and progress transparent for the whole team.</p>
+          </article>
+          <article class="highlight-card">
+            <h2>Quality Delivery</h2>
+            <p>Automated checks and shared standards support reliable builds and confident releases.</p>
+          </article>
+          <article class="highlight-card">
+            <h2>Team Alignment</h2>
+            <p>Centralized communication workflows help engineers and stakeholders stay aligned.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="app-outlet">
+        <div class="outlet-surface">
+          <router-outlet></router-outlet>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="app-footer">
+    <app-footer></app-footer>
+  </footer>
+</div>

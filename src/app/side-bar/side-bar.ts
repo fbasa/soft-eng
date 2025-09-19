@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-side-bar',
@@ -10,7 +10,12 @@ import { Component } from '@angular/core';
 export class SideBar {
   isOpen = true;
 
-  toggleSideBar(){
-    this.isOpen=!this.isOpen;
+  @HostBinding('class.collapsed')
+  get collapsed(): boolean {
+    return !this.isOpen;
+  }
+
+  toggleSideBar() {
+    this.isOpen = !this.isOpen;
   }
 }

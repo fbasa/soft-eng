@@ -1,11 +1,106 @@
-<div class="sideBar" [class.collapsed]="!isOpen">
-  <button class="sideBar_button" (click)="toggleSideBar()">
-    {{ isOpen ? '◀' : '▶' }}
+﻿<nav class="sideBar" [class.collapsed]="!isOpen">
+  <button
+    type="button"
+    class="sideBar_toggle"
+    (click)="toggleSideBar()"
+    [attr.aria-expanded]="isOpen"
+    aria-controls="sidebar-panel"
+  >
+    <span class="toggle-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false">
+        <path
+          d="M7 12h10M7 7h10M7 17h6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </span>
+    <span class="toggle-text">Menu</span>
   </button>
 
-    <ul>
-        <li *ngIf="isOpen">Page 1</li>
-        <li *ngIf="isOpen">Page 2</li>
-        <li *ngIf="isOpen">Page 3</li>
-    </ul>
-</div>
+  <div class="sideBar_inner" id="sidebar-panel">
+    <header class="sideBar_heading">
+      <div class="heading_badge">SJC</div>
+      <div class="heading_text">
+        <h2>Squad Hub</h2>
+        <p>Ship smarter together</p>
+      </div>
+    </header>
+
+    <nav class="sideBar_nav" aria-label="Primary">
+      <ul class="sideBar_menu">
+        <li
+          class="menu_item active"
+          [attr.aria-label]="!isOpen ? 'Dashboard' : null"
+          [attr.title]="!isOpen ? 'Dashboard' : null"
+        >
+          <span class="menu_icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path
+                d="M4 12l8-7 8 7v7a2 2 0 0 1-2 2h-4v-6h-4v6H6a2 2 0 0 1-2-2z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <span class="menu_label">Dashboard</span>
+        </li>
+        <li
+          class="menu_item"
+          [attr.aria-label]="!isOpen ? 'Performance' : null"
+          [attr.title]="!isOpen ? 'Performance' : null"
+        >
+          <span class="menu_icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path
+                d="M5 4h4v16H5zM10 9h4v11h-4zM15 13h4v7h-4z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <span class="menu_label">Performance</span>
+        </li>
+        <li
+          class="menu_item"
+          [attr.aria-label]="!isOpen ? 'Team' : null"
+          [attr.title]="!isOpen ? 'Team' : null"
+        >
+          <span class="menu_icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path
+                d="M12 6a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 6c-4 0-7 2-7 4v2h14v-2c0-2-3-4-7-4z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <span class="menu_label">Team</span>
+        </li>
+        <li
+          class="menu_item"
+          [attr.aria-label]="!isOpen ? 'Projects' : null"
+          [attr.title]="!isOpen ? 'Projects' : null"
+        >
+          <span class="menu_icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path
+                d="M5 5h6v6H5zM13 5h6v6h-6zM5 13h6v6H5zM13 13h6v6h-6z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <span class="menu_label">Projects</span>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sideBar_footer">
+      <div class="status_chip">
+        <span class="chip_pulse" aria-hidden="true"></span>
+        <span class="chip_label">Sprint active</span>
+      </div>
+      <button type="button" class="cta_button">Create session</button>
+    </div>
+  </div>
+</nav>
