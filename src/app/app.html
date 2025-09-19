@@ -39,6 +39,24 @@
             </p-inputgroup-addon>
             <input pInputText [(ngModel)]="text1" placeholder="Username" />
           </p-inputgroup>
+
+          <p-toolbar>
+    <ng-template #start>
+        <p-button icon="pi pi-plus" class="mr-2" text severity="secondary" />
+        <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
+        <p-button icon="pi pi-upload" text severity="secondary" />
+    </ng-template>
+    <ng-template #center>
+        <p-iconfield iconPosition="left">
+            <p-inputicon class="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+        </p-iconfield>
+    </ng-template>
+    <ng-template #end>
+        <p-splitbutton label="Save" [model]="items" />
+    </ng-template>
+</p-toolbar>
+
           <router-outlet></router-outlet>
         </div>
       </section>
