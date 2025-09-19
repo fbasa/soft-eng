@@ -15,8 +15,5 @@ import { TopBar } from './top-bar/top-bar';
 })
 export class App {
   protected readonly title = signal('Software Engineering');
-  //modified by Kinley
-  //Modified by Kristel
-  //Modified by Kristel1  
 }
 

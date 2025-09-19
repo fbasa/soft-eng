@@ -1,6 +1,6 @@
 ﻿.app-footer-shell {
   position: relative;
-  padding: 16px 32px 18px;
+  padding: 10px 20px 10px;
   background: radial-gradient(120% 120% at 50% 0%, rgba(96, 165, 250, 0.22) 0%, rgba(15, 31, 89, 0.95) 45%, rgba(5, 10, 48, 0.98) 100%);
   color: #dfe6ff;
   border-radius: 0 0 18px 18px;
@@ -31,7 +31,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  max-width: 320px;
+  max-width: 430px;
 }
 
 .brand_mark {
