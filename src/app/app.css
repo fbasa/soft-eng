@@ -52,17 +52,11 @@
   padding-bottom: 24px;
 }
 
-
-
-
-
 .app-nav app-side-bar {
   display: flex;
   width: auto;
   height: 100%;
 }
-
-
 
 
 .app-nav app-side-bar:not(.collapsed) {
@@ -144,7 +138,6 @@
 .app-outlet {
   flex: 1 1 auto;
   min-height: 0;
-  overflow: hidden;
   height: 400px;
 }
 
@@ -162,7 +155,6 @@
   align-items: stretch;
   justify-content: flex-start;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 .app-footer {
@@ -237,22 +229,6 @@
     padding: 0 20px 20px;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .outlet-content {
   display: flex;
