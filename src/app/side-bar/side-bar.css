@@ -66,5 +66,5 @@ li:hover .tooltip {
   opacity: 1;
 }
 li span {
-  white-space: nowrap;   /* prevent breaking into multiple lines */
+  white-space: nowrap;
 }
