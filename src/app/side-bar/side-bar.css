@@ -1,15 +1,14 @@
 .sideBar {
     position:relative;
-    width: 150px;
+    width: 160px;
     min-height: 100vh;
     background: rgb(1, 1, 61);
     color: white;
-    padding: 1rem;
     transition: width 0.3s ease;
     overflow: hidden;
 }
 .sideBar.collapsed {
-    width: 90px;
+    width: 30px;
 }
 .sideBar_button {
     position: absolute;
