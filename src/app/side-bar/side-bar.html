@@ -3,9 +3,21 @@
     {{ isOpen ? '◀' : '▶' }}
   </button>
 
-    <ul>
-        <li *ngIf="isOpen">Page 1</li>
-        <li *ngIf="isOpen">Page 2</li>
-        <li *ngIf="isOpen">Page 3</li>
-    </ul>
+   <ul>
+    <li>
+      <span class="icon">📄</span>
+      <span *ngIf="!isOpen" class="tooltip">Page 1</span>
+      <span *ngIf="isOpen">Page 1</span>
+    </li>
+    <li>
+      <span class="icon">📄</span>
+      <span *ngIf="!isOpen" class="tooltip">Page 2</span>
+      <span *ngIf="isOpen">Page 2</span>
+    </li>
+    <li>
+      <span class="icon">📄</span>
+      <span *ngIf="!isOpen" class="tooltip">Page 3</span>
+      <span *ngIf="isOpen">Page 3</span>
+    </li>
+  </ul>
 </div>
