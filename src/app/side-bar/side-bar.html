@@ -25,7 +25,7 @@
     <header class="sideBar_heading">
       <div class="heading_badge">SJC</div>
       <div class="heading_text">
-        <h2>Squad Hub</h2>
+        <h2>DevSync Squad</h2>
         <p>Ship smarter together</p>
       </div>
     </header>
@@ -60,7 +60,7 @@
               />
             </svg>
           </span>
-          <span class="menu_label">Performance</span>
+          <span class="menu_label">Student Management</span>
         </li>
         <li
           class="menu_item"
@@ -75,7 +75,7 @@
               />
             </svg>
           </span>
-          <span class="menu_label">Team</span>
+          <span class="menu_label">Course Management</span>
         </li>
         <li
           class="menu_item"
@@ -90,8 +90,41 @@
               />
             </svg>
           </span>
-          <span class="menu_label">Projects</span>
+          <span class="menu_label">Financial Management</span>
         </li>
+
+        <li
+          class="menu_item"
+          [attr.aria-label]="!isOpen ? 'Projects' : null"
+          [attr.title]="!isOpen ? 'Projects' : null"
+        >
+          <span class="menu_icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path
+                d="M5 5h6v6H5zM13 5h6v6h-6zM5 13h6v6H5zM13 13h6v6h-6z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <span class="menu_label">Reports & Analytics</span>
+        </li>
+
+        <li
+          class="menu_item"
+          [attr.aria-label]="!isOpen ? 'Projects' : null"
+          [attr.title]="!isOpen ? 'Projects' : null"
+        >
+          <span class="menu_icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path
+                d="M5 5h6v6H5zM13 5h6v6h-6zM5 13h6v6H5zM13 13h6v6h-6z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <span class="menu_label">System Utilities</span>
+        </li>
+
       </ul>
     </nav>
 
@@ -100,7 +133,7 @@
         <span class="chip_pulse" aria-hidden="true"></span>
         <span class="chip_label">Sprint active</span>
       </div>
-      <button type="button" class="cta_button">Create session</button>
+      <button type="button" class="cta_button">➕ Grade Entry</button>
     </div>
   </div>
 </nav>
