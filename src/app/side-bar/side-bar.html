@@ -1,12 +1,50 @@
 <div class="sideBar" [class.collapsed]="!isOpen">
-    <div class="sidebar" [class.collapsed]="isOpen">
-  <button (click)="toggleSideBar()">
+  <button class="sideBar_button" (click)="toggleSideBar()">
     {{ isOpen ? '◀' : '▶' }}
   </button>
 
-    <ul>
-        <li *ngIf="isOpen">Page 1</li>
-        <li *ngIf="isOpen">Page 2</li>
-        <li *ngIf="isOpen">Page 3</li>
-    </ul>
+   <ul>
+    <li>
+      <a [routerLink]="['/dashboard']" routerLinkActive="active" class="menu-link">
+        <i class="pi pi-chart-bar"></i>
+        <span class="label">Dashboard</span>
+        <span class="tooltip">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-users"></i>
+        <span class="label">Student</span>
+        <span class="tooltip">Student</span>
+      </a>
+    </li>
+    <li>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-receipt"></i>
+        <span class="label">Course</span>
+        <span class="tooltip">Course</span>
+      </a>
+    </li>
+    <li>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-equals"></i>
+        <span class="label">Grades</span>
+        <span class="tooltip">Grades</span>
+      </a>
+    </li>
+    <li>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-dollar"></i>
+        <span class="label">Finance</span>
+        <span class="tooltip">Finance</span>
+      </a>
+    </li>
+    <li>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-cog"></i>
+        <span class="label">Settings</span>
+        <span class="tooltip">Settings</span>
+      </a>
+    </li>
+  </ul>
 </div>

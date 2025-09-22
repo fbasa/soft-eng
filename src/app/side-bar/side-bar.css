@@ -1,23 +1,106 @@
 .sideBar {
-    border-radius: 25px;
-    width: 150px;
+    position:relative;
+    width: 160px;
     min-height: 100vh;
-    background: rgb(1, 1, 61);
+    background: #282829;
     color: white;
-    padding: 1rem;
     transition: width 0.3s ease;
-    overflow: hidden;
+}
+.sideBar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 .sideBar.collapsed {
-    width: 90px;
+    width: 30px;
 }
-li {
-    font-size: 18px;
-    padding-bottom: 5px;
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  padding: 8px 0;
+  white-space: nowrap;
+}
+.menu-link .label {
+  overflow: hidden;
+  font-size: 18px;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+.sideBar.collapsed .menu-link .label {
+  opacity: 0;
+  width: 0;
+}
+.sideBar_button {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    background:none;
+    color: white;
+    border:none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+}
+.sideBar_button:hover{
+    color:yellow;
+
+}
+.sideBar_button:active{
+    color:yellowgreen;
+}
+
+.sideBar.collapsed .menu-link .label {
+  opacity: 0;
+  width: 0;
+}
+
+.sideBar.collapsed li span {
+  opacity: 0;
+  width: 0;
 }
 button{
     padding: auto;
     background: gold;
     border-radius: 5px;
     
+}
+.icon {
+  margin-right: 5px;
+}
+
+.tooltip {
+  position: absolute;
+  left: 40px;
+  background: black;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.sideBar.collapsed .menu-link:hover .tooltip {
+  opacity: 1;
+}
+i {
+  color:slateblue; 
+  margin: 5px;
+  font-size: 1rem;
+}
+i:hover {
+  color:rgb(169, 156, 255);
+}
+i:active{
+  color: white;
+}
+.label:hover{
+  color:rgb(6, 15, 182)
+}
+.label:active{
+  color: white;
 }
