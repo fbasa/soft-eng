@@ -1,12 +1,16 @@
 <div class="sideBar" [class.collapsed]="!isOpen">
-    <div class="sidebar" [class.collapsed]="isOpen">
-  <button (click)="toggleSideBar()">
-    {{ isOpen ? '◀' : '▶' }}
-  </button>
+  <div class="sidebar" [class.collapsed]="isOpen">
+    <button (click)="toggleSideBar()">
+      {{ isOpen ? '◀' : '▶' }}
+    </button>
 
     <ul>
-        <li *ngIf="isOpen">Page 1</li>
-        <li *ngIf="isOpen">Page 2</li>
-        <li *ngIf="isOpen">Page 3</li>
+      <li *ngIf="isOpen">
+        <a routerLink="/dashboard" routerLinkActive="active">🏠 Dashboard</a>
+      </li>
+      <li *ngIf="isOpen">
+        <a routerLink="/settings" routerLinkActive="active">⚙️ Settings</a>
+      </li>
     </ul>
+  </div>
 </div>
