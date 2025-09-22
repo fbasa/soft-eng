@@ -1,0 +1,14 @@
+.main-layout {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+app-side-bar {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 1rem;
+}
