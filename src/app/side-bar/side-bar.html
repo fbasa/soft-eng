@@ -5,19 +5,46 @@
 
    <ul>
     <li>
-      <span class="icon">📄</span>
-      <span *ngIf="!isOpen" class="tooltip">Page 1</span>
-      <span *ngIf="isOpen">Page 1</span>
+      <a [routerLink]="['/dashboard']" routerLinkActive="active" class="menu-link">
+        <i class="pi pi-chart-bar"></i>
+        <span class="label">Dashboard</span>
+        <span class="tooltip">Dashboard</span>
+      </a>
     </li>
     <li>
-      <span class="icon">📄</span>
-      <span *ngIf="!isOpen" class="tooltip">Page 2</span>
-      <span *ngIf="isOpen">Page 2</span>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-users"></i>
+        <span class="label">Student</span>
+        <span class="tooltip">Student</span>
+      </a>
     </li>
     <li>
-      <span class="icon">📄</span>
-      <span *ngIf="!isOpen" class="tooltip">Page 3</span>
-      <span *ngIf="isOpen">Page 3</span>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-receipt"></i>
+        <span class="label">Course</span>
+        <span class="tooltip">Course</span>
+      </a>
+    </li>
+    <li>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-equals"></i>
+        <span class="label">Grades</span>
+        <span class="tooltip">Grades</span>
+      </a>
+    </li>
+    <li>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-dollar"></i>
+        <span class="label">Finance</span>
+        <span class="tooltip">Finance</span>
+      </a>
+    </li>
+    <li>
+      <a style="cursor: pointer" class="menu-link">
+        <i class="pi pi-cog"></i>
+        <span class="label">Settings</span>
+        <span class="tooltip">Settings</span>
+      </a>
     </li>
   </ul>
 </div>

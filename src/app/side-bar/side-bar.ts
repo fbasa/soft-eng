@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-side-bar',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './side-bar.html',
   styleUrl: './side-bar.css'
 })
 export class SideBar {
-  isOpen = true;
+  isOpen = false;
 
   toggleSideBar(){
     this.isOpen=!this.isOpen;
