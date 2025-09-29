@@ -1,18 +1,27 @@
 <div class="sideBar" [class.collapsed]="!isOpen">
   <button class="sideBar_button" (click)="toggleSideBar()">
-    {{ isOpen ? '◀' : '▶' }}
+    {{ isOpen ? "◀" : "▶" }}
   </button>
 
-   <ul>
+  <ul>
     <li>
-      <a [routerLink]="['/dashboard']" routerLinkActive="active" class="menu-link">
+      <a
+        [routerLink]="['/dashboard']"
+        routerLinkActive="active"
+        class="menu-link"
+      >
         <i class="pi pi-chart-bar"></i>
         <span class="label">Dashboard</span>
         <span class="tooltip">Dashboard</span>
       </a>
     </li>
     <li>
-      <a style="cursor: pointer" class="menu-link">
+      <a
+        style="cursor: pointer"
+        class="menu-link"
+        [routerLink]="['/add-student']"
+        routerLinkActive="active"
+      >
         <i class="pi pi-users"></i>
         <span class="label">Student</span>
         <span class="tooltip">Student</span>
