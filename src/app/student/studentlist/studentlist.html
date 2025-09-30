@@ -1,0 +1,59 @@
+<div class="studentlist-container">
+  <!-- theHeader -->
+  <div class="list-header">
+    <h1>Students List</h1>
+  </div>
+
+  <div class="search-actions">
+    <input type="text" placeholder="Search students..." />
+    <div class="actions">
+        <button class="btn filter">Filter</button>
+        <button class="btn add">Add new Student</button>
+    </div>
+  </div>
+
+  <!-- fortheTable -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date of Birth</th>
+          <th>Gender</th>
+          <th>Program</th>
+          <th>School Year</th>
+          <th>Semester</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Address</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students">
+          <td>{{ student.name }}</td>
+          <td>{{ student.dateOfBirth | date: 'mediumDate' }}</td>
+          <td>{{ student.gender }}</td>
+          <td>{{ student.program }}</td>
+          <td>{{ student.schoolYear }}</td>
+          <td>{{ student.semester }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.contactInfo }}</td>
+          <td>
+            {{TruncateAddress(student.address)}}
+          <td>
+            <button pButton type="button" class="p-button-text">
+                <i class="pi pi-pen-to-square"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button class="btn">Previous</button>
+    <span>Page 1 of 5</span>
+    <button class="btn">Next</button>
+  </div>
+</div>
