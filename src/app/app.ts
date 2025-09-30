@@ -4,19 +4,16 @@ import { Footer } from './footer/footer';
 import { SideBar } from './side-bar/side-bar';
 import { TopBar } from './top-bar/top-bar';
 
-
-
-
 @Component({
+  standalone: true,
   selector: 'app-root',
   imports: [RouterOutlet, Footer, SideBar, TopBar],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css'],
 })
 export class App {
   protected readonly title = signal('Software Engineering');
   //modified by Kinley
   //Modified by Kristel
-  //Modified by Kristel1  
+  //Modified by Kristel1
 }
-
