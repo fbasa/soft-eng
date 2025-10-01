@@ -5,5 +5,7 @@ import { AddStudent } from './add-student/add-student';
 import { Studentlist } from './student/studentlist/studentlist';
 
 export const routes: Routes = [
-    {path: 'dashboard', component: DashboardComponent}
+    {path: 'dashboard', component: DashboardComponent},
+    {path: 'add-student', component: AddStudent},
+    {path: 'studentlist', component: Studentlist}
 ];
