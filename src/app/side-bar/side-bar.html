@@ -16,7 +16,12 @@
       </a>
     </li>
     <li>
-      <a [routerLink]="['/studentlist']" routerLinkActive="active" class="menu-link"> <!--The routerlink here is not it -Kinley -->
+      <a
+        style="cursor: pointer"
+        class="menu-link"
+        [routerLink]="['/add-student']"
+        routerLinkActive="active"
+      >
         <i class="pi pi-users"></i>
         <span class="label">Student</span>
         <span class="tooltip">Student</span>
