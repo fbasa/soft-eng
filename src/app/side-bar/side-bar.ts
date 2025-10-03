@@ -10,8 +10,12 @@ import { RouterLink } from '@angular/router';
 })
 export class SideBar {
   isOpen = false;
+  studentMenuOpen = false;
 
   toggleSideBar(){
     this.isOpen=!this.isOpen;
+  }
+  toggleStudentMenu(){
+    this.studentMenuOpen = !this.studentMenuOpen;
   }
 }

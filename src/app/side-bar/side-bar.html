@@ -19,13 +19,17 @@
       <a
         style="cursor: pointer"
         class="menu-link"
-        [routerLink]="['/add-student']"
-        routerLinkActive="active"
+        href="javascript:void(0)" (click)="toggleStudentMenu()"
       >
         <i class="pi pi-users"></i>
-        <span class="label">Student</span>
+        <p class="label">Student</p>
+        <span class="arrow" [class.rotate]="studentMenuOpen">▼</span>
         <span class="tooltip">Student</span>
       </a>
+      <ul *ngIf="studentMenuOpen" class="submenu">
+        <li><a routerLink="/add-student">Add Student</a></li>
+        <li><a routerLink="/studentlist">Student List</a></li>
+      </ul>
     </li>
     <li>
       <a style="cursor: pointer" class="menu-link">

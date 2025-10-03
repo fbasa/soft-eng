@@ -8,6 +8,6 @@ import { StudentUpdateComponent } from './student-update/student-update';
 export const routes: Routes = [
     {path: 'dashboard', component: DashboardComponent},
     {path: 'add-student', component: AddStudent},
-    {path: 'studentlist', component: Studentlist}
-      { path: 'student-update', component: StudentUpdateComponent } 
+    {path: 'studentlist', component: Studentlist},
+    { path: 'student-update', component: StudentUpdateComponent } 
 ];

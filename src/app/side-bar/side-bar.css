@@ -104,3 +104,32 @@ i:active{
 .label:active{
   color: white;
 }
+
+.submenu{
+  list-style: none;
+  padding-right: 20px;
+  margin: 5px 0;
+}
+.submenu a {
+  padding-left: 35%;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.638);
+  padding-bottom:10px;
+  display: block;
+  font-size: 16px;
+}
+.submenu a:hover{
+  color: white;
+}
+.submenu a:active{
+  color:gray;
+}
+.rotate{
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
+.arrow{
+  transform-origin: center;
+  transition: transform 220ms ease;
+  will-change:transform;
+}
