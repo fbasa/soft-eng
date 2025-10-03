@@ -52,10 +52,6 @@
     color:yellowgreen;
 }
 
-.sideBar.collapsed .menu-link .label {
-  opacity: 0;
-  width: 0;
-}
 
 .sideBar.collapsed li span {
   opacity: 0;

@@ -6,14 +6,15 @@ export interface Student {
   id?: string;
   firstName: string;
   lastName: string;
-  email: string;
-  phone?: string;
+  emailAddress: string;
+  phoneNumber?: string;
   dob: string;
   gender?: string;
   school: string;
+  schoolYear: string;
   yearSemester: string;
-  program: string;
-  address?: string;
+  programClass: string;
+  homeAddress?: string;
   emergencyContact: string;
   emergencyPhone: string;
   notes?: string;
@@ -25,9 +26,11 @@ export interface Student {
   providedIn: 'root',
 })
 export class StudentService {
-  private apiUrl = 'https://fbasa.bsite.net/api/students';
+  private apiUrl = 'https://fbasa.bsite.net/api/v1/Students';
   constructor(private http: HttpClient) {}
-  GetStudents() {}
+  GetStudents(): Observable<{items: Student[], totalCount: number, totalPages: number}> {
+    return this.http.get<{items: Student[], totalCount: number, totalPages: number}>(this.apiUrl);
+  }
 
   GetStudentById(id: number) {}
 
