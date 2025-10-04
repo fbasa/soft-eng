@@ -14,6 +14,9 @@ export class SideBar {
 
   toggleSideBar(){
     this.isOpen=!this.isOpen;
+    if (this.studentMenuOpen === true){
+      this.studentMenuOpen = false;
+    }
   }
   toggleStudentMenu(){
     this.studentMenuOpen = !this.studentMenuOpen;

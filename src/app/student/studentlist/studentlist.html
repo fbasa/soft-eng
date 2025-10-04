@@ -5,9 +5,10 @@
   </div>
 
   <div class="search-actions">
-    <input type="text" placeholder="Search students..." />
+    <input type="text" placeholder="Search student ID..." [(ngModel)]="searchID" />
     <div class="actions">
-        <button class="btn filter">Filter</button>
+        <button class="btn filter" (click)="filterbyId()">Filter</button>
+        <button *ngIf="showRefresh" class="btn refresh" (click)="refreshlist()" pTooltip="Return to original table" tooltipPosition="top"><i class="pi pi-refresh"></i></button>
         <button class="btn add">Add new Student</button>
     </div>
   </div>
@@ -39,7 +40,7 @@
         <td>{{ student.yearSemester }}</td>
         <td>{{ student.emailAddress }}</td>
         <td>{{ student.phoneNumber }}</td>
-        <td>{{ student.homeAddress }}</td>
+        <td pTooltip="{{student.homeAddress}}" tooltipPosition="right">{{ student.homeAddress }}</td>
         <td>
           <button pButton type="button" class="p-button-text" icon="pi pi-pen-to-square"></button>
         </td>
