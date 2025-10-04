@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /* Sidebar container */
 .sidebar {
   width: 220px;
@@ -60,7 +60,7 @@
   background-color: #1abc9c;
   font-weight: bold;
 }
-=======
+
 .sideBar {
     position:relative;
     width: 160px;
@@ -167,4 +167,4 @@ i:active{
 .label:active{
   color: white;
 }
->>>>>>> 54d02952038d88ef586fdf1843a83ea230ac61b1
+
