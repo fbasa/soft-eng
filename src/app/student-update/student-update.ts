@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-student-update',
   templateUrl: './student-update.html',
-  styleUrls: ['./student-update.css'],
   standalone: true
 })
 export class StudentUpdateComponent {

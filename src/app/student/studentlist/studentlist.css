@@ -1,0 +1,155 @@
+.container {
+  padding: 20px;
+  background-color: #111;
+  color: #fff;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.search-actions {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.btn {
+  padding: 8px 12px;
+  margin: 2px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn.filter {
+  background-color: #444;
+  color: #fff;
+}
+
+.btn.filter:hover {
+  background-color: #555;
+}
+.btn.filter:active{
+  background-color: #aaa;
+}
+
+.btn.add {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.btn.add:hover {
+  background-color: #1d4ed8;
+}
+.btn.add:active {
+  background-color: #2f62ee;
+}
+
+.btn.refresh {
+  background-color: green;
+  color: white;
+}
+.btn.refresh:hover{
+  background-color: rgb(1, 183, 1);
+}
+
+.btn.refresh:active{
+  background-color: greenyellow;
+}
+
+.btn.action {
+  background-color: transparent;
+  color: #aaa;
+  font-size: 18px;
+}
+
+.search-actions {
+  margin-bottom: 15px;
+}
+
+.search-actions input {
+  width: 300px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: #fff;
+}
+
+.table-container {
+  overflow-x: auto;
+  background-color: #222;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead {
+  background-color: #333;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #444;
+}
+
+tr:hover {
+  background-color: #2a2a2a;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+
+.dropdown-menu{
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0;
+  min-width: 130px;
+}
+.dropdown-item{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: white;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.dropdown-item:hover{
+  background-color: rgb(106, 104, 104);
+}
+.dropdown-item.deactivate:hover{
+  background-color: red;
+}
+.dropdown-item:active{
+  color:greenyellow;
+}
+.dropdown-item.deactivate:active{
+  color:greenyellow;
+}
