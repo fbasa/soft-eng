@@ -5,11 +5,12 @@ import { Student, StudentService } from '../../services/student-service';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { FormsModule } from '@angular/forms';
+import { PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'app-studentlist',
   standalone: true,
-  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, FormsModule],
+  imports: [CommonModule, ButtonModule, TableModule, TooltipModule, FormsModule, PopoverModule],
   templateUrl: './studentlist.html',
   styleUrl: './studentlist.css'
 })
@@ -26,6 +27,14 @@ export class Studentlist implements OnInit{
         console.log(data);
         this.students=data.items;
       });
+
+      //this is for my actionbutton so that the submenu will be turned off after clicking elsewhere
+      document.addEventListener('click',(event: MouseEvent) =>{
+        const target = event.target as HTMLElement;
+        if(!target.closest('.action-menu')){
+          this.openedMenuIndex = null;
+        }
+      })
   }
 
   filterbyId(){

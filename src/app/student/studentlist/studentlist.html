@@ -30,7 +30,7 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-student>
+    <ng-template pTemplate="body" let-student let-i="rowIndex">
       <tr>
         <td>{{ student.firstName }} {{ student.lastName }}</td>
         <td>{{ student.dob | date: 'mediumDate' }}</td>
@@ -40,9 +40,25 @@
         <td>{{ student.yearSemester }}</td>
         <td>{{ student.emailAddress }}</td>
         <td>{{ student.phoneNumber }}</td>
-        <td pTooltip="{{student.homeAddress}}" tooltipPosition="right">{{ student.homeAddress }}</td>
+        <td pTooltip="{{student.homeAddress}}" tooltipPosition="right">
+          {{ student.homeAddress?.length > 10 ? (student.homeAddress | slice:0:10) + '...': student.homeAddress }}</td>
         <td>
-          <button pButton type="button" class="p-button-text" icon="pi pi-pen-to-square"></button>
+          <div class="action-menu">
+            <button class="btn action" (click)="popover.toggle($event)">
+              <i class="pi pi-pen-to-square"></i>
+            </button>
+
+            <p-popover #popover>
+              <div class="dropdown-menu">
+                <button class="dropdown-item">
+                  <i class="pi pi-pencil"></i> Edit
+                </button>
+                <button class="dropdown-item deactivate">
+                  <i class="pi pi-ban"></i> Deactivate
+                </button>
+              </div>
+            </p-popover>
+          </div>
         </td>
       </tr>
     </ng-template>

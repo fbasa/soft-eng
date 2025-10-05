@@ -19,6 +19,9 @@ export class SideBar {
     }
   }
   toggleStudentMenu(){
+    if (this.isOpen === false){
+      this.isOpen = true;
+    }
     this.studentMenuOpen = !this.studentMenuOpen;
   }
 }

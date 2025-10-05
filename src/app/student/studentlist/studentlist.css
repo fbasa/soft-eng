@@ -123,3 +123,33 @@ tr:hover {
   font-size: 14px;
   color: #aaa;
 }
+
+
+.dropdown-menu{
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0;
+  min-width: 130px;
+}
+.dropdown-item{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: white;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.dropdown-item:hover{
+  background-color: rgb(106, 104, 104);
+}
+.dropdown-item.deactivate:hover{
+  background-color: red;
+}
+.dropdown-item:active{
+  color:greenyellow;
+}
+.dropdown-item.deactivate:active{
+  color:greenyellow;
+}
