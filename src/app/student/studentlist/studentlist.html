@@ -22,7 +22,7 @@
         <th>Gender</th>
         <th>Program</th>
         <th>School Year</th>
-        <th>Semester</th>
+        <th>Year & Semester</th>
         <th>Email</th>
         <th>Phone Number</th>
         <th>Address</th>
@@ -37,11 +37,11 @@
         <td>{{ student.gender }}</td>
         <td>{{ student.programClass }}</td>
         <td>{{ student.schoolYear }}</td>
-        <td>{{ student.yearSemester }}</td>
+        <td pTooltip="{{student.yearSemester}}" tooltipPosition="top">{{ student.yearSemester.length > 6 ? (student.yearSemester | slice: 0:6) + '...': student.yearSemester }}</td>
         <td>{{ student.emailAddress }}</td>
         <td>{{ student.phoneNumber }}</td>
         <td pTooltip="{{student.homeAddress}}" tooltipPosition="right">
-          {{ student.homeAddress?.length > 10 ? (student.homeAddress | slice:0:10) + '...': student.homeAddress }}</td>
+          {{ student.homeAddress?.length > 5 ? (student.homeAddress | slice:0:5) + '...': student.homeAddress }}</td>
         <td>
           <div class="action-menu">
             <button class="btn action" (click)="popover.toggle($event)">
