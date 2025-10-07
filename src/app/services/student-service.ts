@@ -29,17 +29,10 @@ export class StudentService {
   private apiUrl = 'https://fbasa.bsite.net/api/v1/Students';
 
   constructor(private http: HttpClient) {}
-
-  GetStudents(): Observable<{
-    items: Student[];
-    totalCount: number;
-    totalPages: number;
-  }> {
-    return this.http.get<{
-      items: Student[];
-      totalCount: number;
-      totalPages: number;
-    }>(this.apiUrl);
+  
+  GetStudents(page: number = 1, size: number = 50): Observable<any> {
+    let url = `${this.apiUrl}?page=${page}&size=${size}`;
+    return this.http.get<any>(url);
   }
 
   GetStudentById(id: number): Observable<Student> {
