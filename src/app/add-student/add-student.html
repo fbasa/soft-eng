@@ -9,7 +9,7 @@
     <div class="form-grid">
       <!-- Personal Information Section -->
       <div class="form-group">
-        <label for="firstName">First Name *</label>
+        <label for="firstName">First Name <span style="color: red;">*</span></label>
         <input type="text" id="firstName" formControlName="firstName" placeholder="Enter first name" />
         <div *ngIf="studentForm.get('firstName')?.invalid && studentForm.get('firstName')?.touched" class="error">
           First name is required.
@@ -17,7 +17,7 @@
       </div>
       
       <div class="form-group">
-        <label for="lastName">Last Name *</label>
+        <label for="lastName">Last Name <span style="color: red;">*</span></label>
         <input type="text" id="lastName" formControlName="lastName" placeholder="Enter last name" />
         <div *ngIf="studentForm.get('lastName')?.invalid && studentForm.get('lastName')?.touched" class="error">
           Last name is required.
@@ -25,7 +25,7 @@
       </div>
 
       <div class="form-group">
-        <label for="email">Email Address *</label>
+        <label for="email">Email Address <span style="color: red;">*</span></label>
         <input type="email" id="email" formControlName="email" placeholder="student@example.com" />
         <div *ngIf="studentForm.get('email')?.invalid && studentForm.get('email')?.touched" class="error">
           Valid email is required.
@@ -38,7 +38,7 @@
       </div>
 
       <div class="form-group">
-        <label for="dob">Date of Birth *</label>
+        <label for="dob">Date of Birth <span style="color: red;">*</span></label>
         <input type="date" id="dob" formControlName="dob" />
         <div *ngIf="studentForm.get('dob')?.invalid && studentForm.get('dob')?.touched" class="error">
           Date of birth is required.
@@ -54,7 +54,7 @@
 
       <!-- Academic Information Section -->
       <div class="form-group">
-        <label for="school">School *</label>
+        <label for="school">School <span style="color: red;">*</span></label>
         <select id="school" formControlName="school">
           <option value="">Select school</option>
           <option *ngFor="let school of schools" [value]="school">{{ school }}</option>
@@ -65,7 +65,7 @@
       </div>
 
       <div class="form-group">
-        <label for="yearSemester">Year & Semester *</label>
+        <label for="yearSemester">Year & Semester <span style="color: red;">*</span></label>
         <select id="yearSemester" formControlName="yearSemester">
           <option value="">Select year/semester</option>
           <option *ngFor="let ys of yearSemesters" [value]="ys">{{ ys }}</option>
@@ -76,7 +76,7 @@
       </div>
 
       <div class="form-group">
-        <label for="program">Program/Class *</label>
+        <label for="program">Program/Class <span style="color: red;">*</span></label>
         <select id="program" formControlName="program">
           <option value="">Select program</option>
           <option *ngFor="let program of programs" [value]="program">{{ program }}</option>
@@ -92,7 +92,7 @@
       </div>
 
       <div class="form-group">
-        <label for="emergencyContact">Emergency Contact *</label>
+        <label for="emergencyContact">Emergency Contact <span style="color: red;">*</span></label>
         <input type="text" id="emergencyContact" formControlName="emergencyContact" placeholder="Contact name" />
         <div *ngIf="studentForm.get('emergencyContact')?.invalid && studentForm.get('emergencyContact')?.touched"
           class="error">
@@ -101,7 +101,7 @@
       </div>
 
       <div class="form-group">
-        <label for="emergencyPhone">Emergency Phone *</label>
+        <label for="emergencyPhone">Emergency Phone <span style="color: red;">*</span></label>
         <input type="tel" id="emergencyPhone" formControlName="emergencyPhone" placeholder="(123) 456-7890" />
         <div *ngIf="studentForm.get('emergencyPhone')?.invalid && studentForm.get('emergencyPhone')?.touched"
           class="error">
