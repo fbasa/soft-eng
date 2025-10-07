@@ -8,6 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { StudentService, Student } from '../services/student-service';
 import { finalize } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-student',
@@ -21,7 +22,7 @@ export class AddStudent implements OnInit {
   studentForm: FormGroup;
   isEditMode = false; // Currently only adding, edit mode can be implemented later
   isSubmitting = false; // to disable button during submission
- //static dropdown options - can be moved to a service or config later
+  //static dropdown options - can be moved to a service or config later
   schools = ['High School', 'College', 'University', 'Other'];
   yearSemesters = [
     'Year 1 - Semester 1',
@@ -40,10 +41,13 @@ export class AddStudent implements OnInit {
     'Arts & Humanities',
     'Natural Sciences',
   ];
-  genders = ['', 'Male', 'Female', 'Other', 'Prefer not to say'];
+  genders = ['', 'Male', 'Female'];
 
- 
-  constructor(private fb: FormBuilder, private studentService: StudentService) {
+  constructor(
+    private studentService: StudentService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {
     //initialize reactive form with validation rules
     this.studentForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -74,34 +78,53 @@ export class AddStudent implements OnInit {
     }
 
     this.isSubmitting = true;
+
     const studentData: Student = {
-      ...this.studentForm.value,
-      status: 'active', // Default status on add
+      firstName: this.studentForm.value.firstName,
+      lastName: this.studentForm.value.lastName,
+      emailAddress: this.studentForm.value.email,
+      phoneNumber: this.studentForm.value.phone,
+      dob: this.studentForm.value.dob,
+      gender: this.studentForm.value.gender,
+      school: this.studentForm.value.school,
+      schoolYear: '2025',
+      yearSemester: this.studentForm.value.yearSemester,
+      programClass: this.studentForm.value.program,
+      homeAddress: this.studentForm.value.address,
+      emergencyContact: this.studentForm.value.emergencyContact,
+      emergencyPhone: this.studentForm.value.emergencyPhone,
+      notes: this.studentForm.value.notes,
+      status: 'active',
     };
-     // Call service to add student
+
+    console.log('Sending payload to API:', studentData);
+
     this.studentService
       .AddStudent(studentData)
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
-        next: () => {
-          alert('Student added successfully!');
+        next: (res) => {
+          console.log('✅ Student added successfully. API response:', res);
           this.studentForm.reset();
-          // // TODO: Here you might want to notify the student list component to refresh
-          // // or navigate to the student list page to see the new student
+
+          // In AddStudent.ts
+        this.router.navigate(['/students'], { queryParams: { refresh: 'true' } });
+
         },
         error: (error) => {
-          console.error('Add student error:', error);
+          console.error('❌ Add student error:', error);
           alert('Failed to add student. Please try again.');
         },
       });
   }
+
   onCancel(): void {
     this.studentForm.reset();
     this.isEditMode = false;
     this.editId = undefined;
-     // // TODO: Optionally navigate back to student list or clear form
+    // // TODO: Optionally navigate back to student list or clear form
   }
-   // Dynamic form title based on mode
+  // Dynamic form title based on mode
   get formTitle(): string {
     return this.isEditMode ? 'EDIT STUDENT' : 'ADD NEW STUDENT';
   }

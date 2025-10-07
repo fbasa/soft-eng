@@ -9,7 +9,7 @@
     <div class="actions">
         <button class="btn filter" (click)="filterbyId()">Filter</button>
         <button *ngIf="showRefresh" class="btn refresh" (click)="refreshlist()" pTooltip="Return to original table" tooltipPosition="top"><i class="pi pi-refresh"></i></button>
-        <button class="btn add">Add new Student</button>
+        <button class="btn add" (click)="goToAddStudent()">Add new Student</button>
     </div>
   </div>
 
