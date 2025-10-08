@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,7 +8,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { StudentService, Student } from '../services/student-service';
 import { finalize } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Router, CanDeactivate } from '@angular/router';
+
+export interface CanComponentDeactivate {
+  canDeactivate: () => boolean;
+}
 
 @Component({
   selector: 'app-add-student',
@@ -17,12 +21,12 @@ import { Router } from '@angular/router';
   templateUrl: './add-student.html',
   styleUrls: ['./add-student.css'],
 })
-export class AddStudent implements OnInit {
-  @Input() editId?: string; // For future edit functionality
+export class AddStudent implements OnInit, CanComponentDeactivate {
+  @Input() editId?: string;
   studentForm: FormGroup;
-  isEditMode = false; // Currently only adding, edit mode can be implemented later
-  isSubmitting = false; // to disable button during submission
-  //static dropdown options - can be moved to a service or config later
+  isEditMode = false;
+  isSubmitting = false;
+
   schools = ['High School', 'College', 'University', 'Other'];
   yearSemesters = [
     'Year 1 - Semester 1',
@@ -48,7 +52,6 @@ export class AddStudent implements OnInit {
     private fb: FormBuilder,
     private router: Router
   ) {
-    //initialize reactive form with validation rules
     this.studentForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -67,15 +70,18 @@ export class AddStudent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Currently no edit functionality implemented
-    // TO DO: If editId is provided, fetch student data and populate form
+    // TODO: implement edit mode
   }
 
+  /** Spinner + prevent duplicate clicks + validation */
   onSubmit(): void {
     if (this.studentForm.invalid) {
       alert('Please fill in all required fields correctly.');
+      this.markAllFieldsTouched();
       return;
     }
+
+    if (this.isSubmitting) return; // Prevent duplicate clicks
 
     this.isSubmitting = true;
 
@@ -97,37 +103,68 @@ export class AddStudent implements OnInit {
       status: 'active',
     };
 
-    console.log('Sending payload to API:', studentData);
-
     this.studentService
       .AddStudent(studentData)
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: (res) => {
-          console.log('✅ Student added successfully. API response:', res);
-          this.studentForm.reset();
-
-          // In AddStudent.ts
-        this.router.navigate(['/students'], { queryParams: { refresh: 'true' } });
-
+          console.log('✅ Student added successfully', res);
+          // Keep spinner visible for a short UX delay
+          setTimeout(() => {
+            this.studentForm.reset();
+            // Navigate to student list automatically
+            this.router.navigate(['/studentlist']);
+          }, 300); // 300ms delay
         },
-        error: (error) => {
-          console.error('❌ Add student error:', error);
+        error: (err) => {
+          console.error('❌ Add student error:', err);
           alert('Failed to add student. Please try again.');
         },
       });
   }
 
+  /** Mark all fields touched to show errors */
+  private markAllFieldsTouched() {
+    Object.keys(this.studentForm.controls).forEach((field) => {
+      this.studentForm.get(field)?.markAsTouched();
+    });
+  }
+
+  /** Cancel button */
   onCancel(): void {
+    if (
+      this.studentForm.dirty &&
+      !confirm('You have unsaved changes. Discard them?')
+    ) {
+      return;
+    }
     this.studentForm.reset();
     this.isEditMode = false;
     this.editId = undefined;
-    // // TODO: Optionally navigate back to student list or clear form
   }
-  // Dynamic form title based on mode
+
+  /** Dirty guard for browser/tab close or navigate away */
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.studentForm.dirty && !this.isSubmitting) {
+      $event.returnValue = true; // standard for most browsers
+    }
+  }
+
+  /** Angular route guard canDeactivate */
+  canDeactivate(): boolean {
+    if (this.studentForm.dirty && !this.isSubmitting) {
+      return confirm(
+        'You have unsaved changes. Are you sure you want to leave?'
+      );
+    }
+    return true;
+  }
+
   get formTitle(): string {
     return this.isEditMode ? 'EDIT STUDENT' : 'ADD NEW STUDENT';
   }
+
   get submitButtonText(): string {
     return this.isEditMode ? 'Update Student' : 'Add Student';
   }
