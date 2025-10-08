@@ -116,6 +116,10 @@ export class Studentlist implements OnInit {
     this.router.navigate(['/add-student']);
   }
 
+  goToEditStudent(id: number) {
+    this.router.navigate(['/student-entry'], { queryParams: { id } });
+  }
+
   confirmDelete(student: Student){
     this.confirmService.confirm({
       message: `Are you sure you want to delete ${student.firstName}?`,

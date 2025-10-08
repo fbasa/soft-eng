@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs/operators';
-import { Router, CanDeactivate } from '@angular/router';
+import { Router, CanDeactivate, ActivatedRoute } from '@angular/router';
 import { Student, StudentService } from '../../services/student-service';
 
 export interface CanComponentDeactivate {
@@ -47,11 +47,25 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   ];
   genders = ['', 'Male', 'Female'];
 
+  id: number = 0; // For edit mode
+
   constructor(
     private studentService: StudentService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
+
+    this.route.queryParams
+    .subscribe(params => {
+      this.id = params['id'];
+      if (this.id || this.id > 0){ 
+        this.isEditMode=true;
+      }else{
+        this.isEditMode=false;
+      }
+    });
+
     this.studentForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -70,7 +84,14 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   }
 
   ngOnInit(): void {
-    // TODO: implement edit mode
+    if (!this.isEditMode) return;
+    this.studentService.GetStudentById(this.id)
+    .subscribe((student:Student) => {
+      this.studentForm = this.fb.group({
+        firstName: [student.firstName, Validators.required],
+        // ... populate other fields similarly
+      });
+    })
   }
 
   /** Spinner + prevent duplicate clicks + validation */

@@ -53,7 +53,7 @@
 
             <p-popover #popover>
               <div class="dropdown-menu">
-                <button class="dropdown-item">
+                <button class="dropdown-item" (click)="goToEditStudent(student.id)">
                   <i class="pi pi-pencil"></i> Edit
                 </button>
                 <button class="dropdown-item deactivate" (click)="confirmDelete(student)">
