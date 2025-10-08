@@ -6,22 +6,22 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { StudentService, Student } from '../services/student-service';
 import { finalize } from 'rxjs/operators';
 import { Router, CanDeactivate } from '@angular/router';
+import { Student, StudentService } from '../../services/student-service';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => boolean;
 }
 
 @Component({
-  selector: 'app-add-student',
-  standalone: true,
+  selector: 'app-student-entry',
+  templateUrl: './student-entry.html',
+  styleUrl: './student-entry.css',
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './add-student.html',
-  styleUrls: ['./add-student.css'],
+  standalone: true,
 })
-export class AddStudent implements OnInit, CanComponentDeactivate {
+export class StudentEntry implements OnInit, CanComponentDeactivate {
   @Input() editId?: string;
   studentForm: FormGroup;
   isEditMode = false;
