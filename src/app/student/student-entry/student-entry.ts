@@ -13,7 +13,6 @@ import { MessageService } from 'primeng/api';
 import { finalize } from 'rxjs/operators';
 import { Router, CanDeactivate, ActivatedRoute } from '@angular/router';
 import { Student, StudentService } from '../../services/student-service';
-
 export interface CanComponentDeactivate {
   canDeactivate: () => boolean;
 }
@@ -91,14 +90,13 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
 
     // Bind form with existing student data (full population)
     this.studentService.GetStudentById(this.id).subscribe((student: Student) => {
-      // Convert DOB string (e.g., 'YYYY-MM-DD') to Date for Datepicker
       const dobDate = student.dob ? new Date(student.dob) : null;
       this.studentForm.patchValue({
         firstName: student.firstName,
         lastName: student.lastName,
         email: student.emailAddress,
         phone: student.phoneNumber,
-        dob: dobDate, // Bind as Date
+        dob: dobDate, 
         gender: student.gender,
         school: student.school,
         yearSemester: student.yearSemester,
@@ -157,22 +155,21 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
           console.log('✅ Student saved successfully', res);
           this.showToast('success', 'Student saved.'); // Always show toast
 
-          // Reset form (keep DOB as null)
+         
           this.studentForm.reset({ dob: null });
 
           if (this.addMultiple && !this.isEditMode) {
-            // Add Multiple: Clear form, focus First Name, stay on page
+            
             setTimeout(() => {
               this.firstNameInput.nativeElement.focus();
-            }, 100); // Small delay for UX
+            }, 100); 
           } else {
-            // Normal: Short delay then redirect to student list
             setTimeout(() => {
-              this.router.navigate(['/studentlist']); // Assumes route exists
+              this.router.navigate(['/studentlist']);
             }, 300);
           }
         },
-        error: (err: any) => { // Explicit type to fix implicit any
+        error: (err: any) => { 
           console.error('❌ Save student error:', err);
           this.showToast('error', 'Failed to save student. Please try again.');
           alert('Failed to save student. Please try again.');
@@ -180,7 +177,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       });
   }
 
-  // Helper: Format Date to 'YYYY-MM-DD' string for backend
+  
   private formatDateToString(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -188,7 +185,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
     return `${year}-${month}-${day}`;
   }
 
-  // Show PrimeNG Toast (top-right, auto-dismiss 3s)
+  
   private showToast(severity: string, summary: string, detail?: string): void {
     this.messageService.add({
       severity,
@@ -197,8 +194,6 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       life: 3000,
     });
   }
-
-  // Handle Add Multiple checkbox change (optional future logic)
   onAddMultipleChange(): void {
     // e.g., Could add validation or UI changes here
   }
@@ -220,7 +215,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
     }
     this.studentForm.reset({ dob: null });
     this.isEditMode = false;
-    this.addMultiple = false; // Reset checkbox
+    this.addMultiple = false; 
     this.editId = undefined;
   }
 
