@@ -1,10 +1,10 @@
 <app-top-bar></app-top-bar>
 
 <div class="main-layout">
-  <app-side-bar></app-side-bar>
+  <app-side-bar #sidebar></app-side-bar>
 
   <div class="content">
-    <router-outlet></router-outlet>
+    <router-outlet #outlet="outlet"></router-outlet>
   </div>
 </div>
 

@@ -1,1 +1,32 @@
-<h1 style="position: absolute; align-items: center; justify-content: center; color:rgb(248, 9, 9)">DASHBOARD NOW WORKS!!</h1>
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2>Dashboard</h2>
+    <button class="btn refresh" (click)="refreshData()" [disabled]="loading">
+      Refresh
+    </button>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-box">
+      <h3>Total Students</h3>
+      <p-chart
+        type="bar"
+        [data]="totalChartData"
+        [options]="{ responsive: true, plugins: { legend: { display: false } } }"
+      ></p-chart>
+    </div>
+
+    <div class="chart-box">
+      <h3>Students per Course</h3>
+      <p-chart
+        type="bar"
+        [data]="courseChartData"
+        [options]="{ responsive: true, plugins: { legend: { display: false } } }"
+      ></p-chart>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="spinner-overlay">
+    <p>Loading dashboard data...</p>
+  </div>
+</div>
