@@ -14,7 +14,7 @@ import { ToastModule } from 'primeng/toast';
 import { Message } from 'primeng/message';
 
 @Component({
-  selector: 'app-studentlist',
+  selector: 'app-student-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -27,8 +27,8 @@ import { Message } from 'primeng/message';
     ConfirmDialogModule,
     ToastModule
   ],
-  templateUrl: './studentlist.html',
-  styleUrl: './studentlist.css',
+  templateUrl: './student-list.html',
+  styleUrl: './student-list.css',
   providers: [ConfirmationService, MessageService]
 })
 export class Studentlist implements OnInit {
