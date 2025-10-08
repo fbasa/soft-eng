@@ -113,7 +113,7 @@ export class Studentlist implements OnInit {
   }
 
   goToAddStudent() {
-    this.router.navigate(['/add-student']);
+    this.router.navigate(['/student-entry']);
   }
 
   goToEditStudent(id: number) {

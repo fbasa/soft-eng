@@ -56,6 +56,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
     private route: ActivatedRoute
   ) {
 
+    //capture query param id from the url
     this.route.queryParams
     .subscribe(params => {
       this.id = params['id'];
@@ -85,6 +86,8 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
 
   ngOnInit(): void {
     if (!this.isEditMode) return;
+
+    //bind form with existing student data
     this.studentService.GetStudentById(this.id)
     .subscribe((student:Student) => {
       this.studentForm = this.fb.group({
