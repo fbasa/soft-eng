@@ -108,11 +108,11 @@ i:active{
   max-height: 0;
   overflow: hidden;
   opacity: 0;
-  transition: max-height 0.3s ease, opacity 0.1s ease;
 }
 
 .submenu.show {
   max-height: 200px;
+  transition: max-height 0.3s ease, opacity 1.3s ease;
   opacity: 1;
 }
 

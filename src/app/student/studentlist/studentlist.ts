@@ -7,6 +7,11 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { Message } from 'primeng/message';
 
 @Component({
   selector: 'app-studentlist',
@@ -18,19 +23,28 @@ import { Router, ActivatedRoute } from '@angular/router';
     TooltipModule,
     FormsModule,
     PopoverModule,
+    ProgressSpinnerModule,
+    ConfirmDialogModule,
+    ToastModule
   ],
   templateUrl: './studentlist.html',
   styleUrl: './studentlist.css',
+  providers: [ConfirmationService, MessageService]
 })
 export class Studentlist implements OnInit {
   students: Student[] = [];
   filteredStudents: Student[] = [];
-  searchID: string = '';
+  searchName: string = '';
   loading = true;
   showRefresh = false;
   openedMenuIndex: number | null = null;
 
-  constructor(private studentService: StudentService, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private studentService: StudentService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private confirmService: ConfirmationService,
+    private messageService: MessageService) {}
 
   ngOnInit(): void {
   this.loadStudents();
@@ -49,6 +63,7 @@ export class Studentlist implements OnInit {
       next: (data) => {
         console.log('Students loaded:', data.items);
         this.students = data.items;
+        this.filteredStudents=[...this.students];
         this.loading = false;
         this.showRefresh = false;
       },
@@ -59,31 +74,33 @@ export class Studentlist implements OnInit {
     });
   }
 
-  filterbyId() {
-    const id = Number(this.searchID);
-    if (!id) {
-      alert('Student not found or incorrect ID.');
-      this.searchID = '';
-      return;
-    }
+  filterbyName() {
+    const search = this.searchName.trim().toLowerCase();
+    this.loading = true;
 
-    console.log('Searching student by ID:', id);
+    setTimeout(() => {
+      if (!search) {
+        alert('Please enter a name to search.');
+        this.filteredStudents = [...this.students];
+        this.showRefresh = false;
+        this.loading = false;
+        return;
+      }
 
-    this.studentService.GetStudentById(id).subscribe({
-      next: (student) => {
-        console.log('Filtered student:', student);
-        this.students = [student];
-        this.searchID = '';
-        this.showRefresh = true;
-      },
-      error: (err) => {
-        console.error('No students found:', err);
-        alert('No students found');
-        this.searchID = '';
-        this.showRefresh = true;
-      },
-    });
-  }
+      this.filteredStudents = this.students.filter(student =>
+        student.firstName.toLowerCase().includes(search) ||
+        student.lastName.toLowerCase().includes(search)
+      );
+
+      this.showRefresh = true;
+      this.loading = false;
+
+      if (this.filteredStudents.length === 0) {
+        alert('No students found with that name.');
+      }
+    }, 500);
+}
+
 
   toggleMenu(index: number) {
     this.openedMenuIndex =
@@ -92,10 +109,53 @@ export class Studentlist implements OnInit {
 
   refreshlist() {
     this.loadStudents(); 
-    this.searchID = '';
+    this.searchName = '';
   }
 
   goToAddStudent() {
     this.router.navigate(['/add-student']);
+  }
+
+  confirmDelete(student: Student){
+    this.confirmService.confirm({
+      message: `Are you sure you want to delete ${student.firstName}?`,
+      header: 'Confirm Deletion',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteStudent(student.id!);
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelled',
+          detail: 'Deletion Cancelled.',
+          life: 2000
+        })
+      }
+    });
+  }
+
+  deleteStudent(id: number){
+    this.loading=true;
+    this.studentService.DeleteStudent(id).subscribe({
+      next: () => {
+        this.loadStudents();
+        this.messageService.add({
+          severity: 'Success',
+          summary: 'Deleted',
+          detail: 'Successfully deleted!',
+          life: 2500
+        });
+      },
+      error: (err) => {
+        console.error('Delete failed', err);
+        this.loading=false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to delete student.',
+        });
+      }
+    })
   }
 }

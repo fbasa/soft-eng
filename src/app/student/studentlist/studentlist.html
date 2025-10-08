@@ -5,16 +5,19 @@
   </div>
 
   <div class="search-actions">
-    <input type="text" placeholder="Search student ID..." [(ngModel)]="searchID" />
+    <input type="text" placeholder="Search student name..." [(ngModel)]="searchName" />
     <div class="actions">
-        <button class="btn filter" (click)="filterbyId()">Filter</button>
+        <button class="btn filter" (click)="filterbyName()">Filter</button>
         <button *ngIf="showRefresh" class="btn refresh" (click)="refreshlist()" pTooltip="Return to original table" tooltipPosition="top"><i class="pi pi-refresh"></i></button>
         <button class="btn add" (click)="goToAddStudent()">Add new Student</button>
     </div>
   </div>
 
   <!-- fortheTable -->
-  <p-table [value]="students" [paginator]="true" [rows]="5" [showCurrentPageReport]="true">
+  <div class="spinner-overlay" *ngIf="loading">
+    <p-progress-spinner animationDuration=".5s" [style]="{width: '50px', height: '50px'}"/>
+  </div>
+    <p-table *ngIf="!loading" [value]="filteredStudents" [paginator]="true" [rows]="5" [showCurrentPageReport]="true">
     <ng-template pTemplate="header">
       <tr>
         <th>Name</th>
@@ -35,7 +38,7 @@
         <td>{{ student.firstName }} {{ student.lastName }}</td>
         <td>{{ student.dob | date: 'mediumDate' }}</td>
         <td>{{ student.gender }}</td>
-        <td>{{ student.programClass }}</td>
+        <td pTooltip="{{student.programClass}}" tooltipPosition="top">{{ student.programClass.length > 6 ? (student.programClass | slice: 0:6) + '...': student.programClass }}</td>
         <td>{{ student.schoolYear }}</td>
         <td pTooltip="{{student.yearSemester}}" tooltipPosition="top">{{ student.yearSemester.length > 6 ? (student.yearSemester | slice: 0:6) + '...': student.yearSemester }}</td>
         <td>{{ student.emailAddress }}</td>
@@ -53,8 +56,8 @@
                 <button class="dropdown-item">
                   <i class="pi pi-pencil"></i> Edit
                 </button>
-                <button class="dropdown-item deactivate">
-                  <i class="pi pi-ban"></i> Deactivate
+                <button class="dropdown-item deactivate" (click)="confirmDelete(student)">
+                  <i class="pi pi-ban"></i> Delete
                 </button>
               </div>
             </p-popover>
@@ -63,3 +66,5 @@
       </tr>
     </ng-template>
   </p-table>
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
