@@ -47,4 +47,8 @@ export class StudentService {
   }
 
   UpdateStudent(student: any) {}
+
+  DeleteStudent(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}?Id=${id}`);
+  }
 }
