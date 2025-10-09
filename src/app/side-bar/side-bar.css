@@ -65,6 +65,7 @@
     position:relative;
     width: 160px;
     height: 100vh;
+    height: 100vh;
     background: #282829;
     color: white;
     transition: width 0.3s ease;

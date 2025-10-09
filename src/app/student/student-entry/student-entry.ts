@@ -1,13 +1,17 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DatePickerModule } from 'primeng/datepicker'; // ✅ Correct PrimeNG module
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { finalize } from 'rxjs/operators';
-import { Router, CanDeactivate, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Student, StudentService } from '../../services/student-service';
 
 export interface CanComponentDeactivate {
@@ -17,27 +21,36 @@ export interface CanComponentDeactivate {
 @Component({
   selector: 'app-student-entry',
   templateUrl: './student-entry.html',
-  styleUrl: './student-entry.css',
-  imports: [CommonModule, ReactiveFormsModule],
+  styleUrls: ['./student-entry.css'],
   standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    DatePickerModule,
+    ToastModule,
+  ],
+  providers: [MessageService],
 })
-export class StudentEntry implements OnInit, CanComponentDeactivate {
+export class StudentEntryComponent implements OnInit, CanComponentDeactivate {
   @Input() editId?: string;
+  @ViewChild('firstNameInput') firstNameInput!: ElementRef;
+
+  canDeactivate(): boolean {
+    // You can add custom logic here, e.g., check if form is dirty
+    return true;
+  }
+
   studentForm: FormGroup;
   isEditMode = false;
   isSubmitting = false;
+  addMultiple = false;
+
+  minDate = new Date(1900, 0, 1);
+  maxDate = new Date();
 
   schools = ['High School', 'College', 'University', 'Other'];
-  yearSemesters = [
-    'Year 1 - Semester 1',
-    'Year 1 - Semester 2',
-    'Year 2 - Semester 1',
-    'Year 2 - Semester 2',
-    'Year 3 - Semester 1',
-    'Year 3 - Semester 2',
-    'Year 4 - Semester 1',
-    'Year 4 - Semester 2',
-  ];
+  yearSemesters = ['1st', '2nd'];
   programs = [
     'Computer Science',
     'Engineering',
@@ -47,24 +60,18 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   ];
   genders = ['', 'Male', 'Female'];
 
-  id: number = 0; // For edit mode
+  id: number = 0;
 
   constructor(
     private studentService: StudentService,
     private fb: FormBuilder,
+    private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-
-    //capture query param id from the url
-    this.route.queryParams
-    .subscribe(params => {
-      this.id = params['id'];
-      if (this.id || this.id > 0){ 
-        this.isEditMode=true;
-      }else{
-        this.isEditMode=false;
-      }
+    this.route.queryParams.subscribe((params) => {
+      this.id = +params['id'] || 0;
+      this.isEditMode = !!this.id;
     });
 
     this.studentForm = this.fb.group({
@@ -72,12 +79,12 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: [''],
-      dob: ['', Validators.required],
+      dob: [null, Validators.required],
       gender: [''],
       school: ['', Validators.required],
       yearSemester: ['', Validators.required],
       program: ['', Validators.required],
-      address: [''],
+      address: ['', Validators.required],
       emergencyContact: ['', Validators.required],
       emergencyPhone: ['', Validators.required],
       notes: [''],
@@ -87,17 +94,26 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   ngOnInit(): void {
     if (!this.isEditMode) return;
 
-    //bind form with existing student data
-    this.studentService.GetStudentById(this.id)
-    .subscribe((student:Student) => {
-      this.studentForm = this.fb.group({
-        firstName: [student.firstName, Validators.required],
-        // ... populate other fields similarly
+    this.studentService.GetStudentById(this.id).subscribe((student: Student) => {
+      const dobDate = student.dob ? new Date(student.dob) : null;
+      this.studentForm.patchValue({
+        firstName: student.firstName,
+        lastName: student.lastName,
+        email: student.emailAddress,
+        phone: student.phoneNumber,
+        dob: dobDate,
+        gender: student.gender,
+        school: student.school,
+        yearSemester: student.yearSemester,
+        program: student.programClass,
+        address: student.homeAddress,
+        emergencyContact: student.emergencyContact,
+        emergencyPhone: student.emergencyPhone,
+        notes: student.notes,
       });
-    })
+    });
   }
 
-  /** Spinner + prevent duplicate clicks + validation */
   onSubmit(): void {
     if (this.studentForm.invalid) {
       alert('Please fill in all required fields correctly.');
@@ -105,16 +121,19 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       return;
     }
 
-    if (this.isSubmitting) return; // Prevent duplicate clicks
-
+    if (this.isSubmitting) return;
     this.isSubmitting = true;
+
+    const dobString = this.studentForm.value.dob
+      ? this.formatDateToString(this.studentForm.value.dob)
+      : '';
 
     const studentData: Student = {
       firstName: this.studentForm.value.firstName,
       lastName: this.studentForm.value.lastName,
       emailAddress: this.studentForm.value.email,
       phoneNumber: this.studentForm.value.phone,
-      dob: this.studentForm.value.dob,
+      dob: dobString,
       gender: this.studentForm.value.gender,
       school: this.studentForm.value.school,
       schoolYear: '2025',
@@ -127,69 +146,58 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       status: 'active',
     };
 
-    this.studentService
-      .AddStudent(studentData)
-      .pipe(finalize(() => (this.isSubmitting = false)))
+    // ✅ Implements instructor's TODO comment (UpdateStudent if edit mode)
+    const request = this.isEditMode
+      ? this.studentService.UpdateStudent(this.id, studentData)
+      : this.studentService.AddStudent(studentData);
+
+    request
+      ?.pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
-        next: (res) => {
-          console.log('✅ Student added successfully', res);
-          // Keep spinner visible for a short UX delay
-          setTimeout(() => {
-            this.studentForm.reset();
-            // Navigate to student list automatically
-            this.router.navigate(['/studentlist']);
-          }, 300); // 300ms delay
+        next: (res: any) => {
+          console.log('✅ Student saved successfully', res);
+          this.showToast('success', 'Student saved successfully.');
+
+          this.studentForm.reset({ dob: null });
+
+          if (this.addMultiple && !this.isEditMode) {
+            setTimeout(() => {
+              this.firstNameInput.nativeElement.focus();
+            }, 100);
+          } else {
+            setTimeout(() => {
+              this.router.navigate(['/studentlist']);
+            }, 300);
+          }
         },
-        error: (err) => {
-          console.error('❌ Add student error:', err);
-          alert('Failed to add student. Please try again.');
+        error: (err: any) => {
+          console.error('❌ Save student error:', err);
+          this.showToast('error', 'Failed to save student. Please try again.');
         },
       });
   }
 
-  /** Mark all fields touched to show errors */
-  private markAllFieldsTouched() {
-    Object.keys(this.studentForm.controls).forEach((field) => {
-      this.studentForm.get(field)?.markAsTouched();
+  private markAllFieldsTouched(): void {
+    Object.keys(this.studentForm.controls).forEach((key) => {
+      this.studentForm.controls[key].markAsTouched();
     });
   }
 
-  /** Cancel button */
-  onCancel(): void {
-    if (
-      this.studentForm.dirty &&
-      !confirm('You have unsaved changes. Discard them?')
-    ) {
-      return;
-    }
-    this.studentForm.reset();
-    this.isEditMode = false;
-    this.editId = undefined;
+  private formatDateToString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
-  /** Dirty guard for browser/tab close or navigate away */
-  @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any) {
-    if (this.studentForm.dirty && !this.isSubmitting) {
-      $event.returnValue = true; // standard for most browsers
-    }
+  private showToast(severity: string, summary: string, detail?: string): void {
+    this.messageService.add({
+      severity,
+      summary,
+      detail,
+      life: 3000,
+    });
   }
 
-  /** Angular route guard canDeactivate */
-  canDeactivate(): boolean {
-    if (this.studentForm.dirty && !this.isSubmitting) {
-      return confirm(
-        'You have unsaved changes. Are you sure you want to leave?'
-      );
-    }
-    return true;
-  }
-
-  get formTitle(): string {
-    return this.isEditMode ? 'EDIT STUDENT' : 'ADD NEW STUDENT';
-  }
-
-  get submitButtonText(): string {
-    return this.isEditMode ? 'Update Student' : 'Add Student';
-  }
+  onAddMultipleChange(): void {}
 }
