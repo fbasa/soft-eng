@@ -117,6 +117,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       return;
     }
 
+
     if (this.isSubmitting) return; // Prevent duplicate clicks
 
     this.isSubmitting = true;
@@ -127,6 +128,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       : '';
 
     const studentData: Student = {
+      id: this.id,
       firstName: this.studentForm.value.firstName,
       lastName: this.studentForm.value.lastName,
       emailAddress: this.studentForm.value.email,
@@ -146,14 +148,16 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
 
     // Always use AddStudent (for now; edit mode creates new—implement UpdateStudent(id, student) in service for proper edit)
     // TODO: For full edit support: const request = this.isEditMode ? this.studentService.UpdateStudent(this.id, studentData) : this.studentService.AddStudent(studentData);
-    const request = this.studentService.AddStudent(studentData); // Observable<Student> - ensures pipe works
+    const request = this.isEditMode 
+      ? this.studentService.UpdateStudent(this.id, studentData)
+      : this.studentService.AddStudent(studentData); // Observable<Student> - ensures pipe works
 
     request
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: (res: any) => { // Explicit type to fix implicit any
           console.log('✅ Student saved successfully', res);
-          this.showToast('success', 'Student saved.'); // Always show toast
+          this.showToast('success', this.isEditMode ? 'Student updated!' : 'Student saved.'); // Always show toast
 
          
           this.studentForm.reset({ dob: null });
