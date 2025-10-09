@@ -1,13 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
-body {
-  margin: 0;
-  padding: 0;
-}
-/* Remove scrollbars and make the app 100% visible */
+/* Full-screen app setup with solid background and scrolling */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
-  overflow: hidden; /* hides scrollbars */
+  height: 100vh; /* Use vh for full viewport, prevents height mismatches */
+  overflow:auto;
+
 }

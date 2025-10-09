@@ -64,7 +64,7 @@
 .sideBar {
     position:relative;
     width: 160px;
-    min-height: 100vh;
+    height: 100vh;
     background: #282829;
     color: white;
     transition: width 0.3s ease;
@@ -108,17 +108,13 @@
     font-size: 20px;
 }
 .sideBar_button:hover{
-    color:yellow;
+    color:blue;
 
 }
 .sideBar_button:active{
-    color:yellowgreen;
+    color:lightblue;
 }
 
-.sideBar.collapsed .menu-link .label {
-  opacity: 0;
-  width: 0;
-}
 
 .sideBar.collapsed li span {
   opacity: 0;
@@ -168,3 +164,56 @@ i:active{
   color: white;
 }
 
+.submenu {
+  list-style: none;
+  padding-left: 35%;
+  margin: 5px 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.submenu.show {
+  max-height: 200px;
+  transition: max-height 0.3s ease, opacity 1.3s ease;
+  opacity: 1;
+}
+
+.submenu a {
+  padding-left: 35%;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.638);
+  padding-bottom:10px;
+  display: block;
+  font-size: 16px;
+}
+.submenu a:hover{
+  color: white;
+}
+.submenu a:active{
+  color:gray;
+}
+
+.arrow{
+  display: inline-block;
+  transition: transform 0.25s ease;
+  transform-origin: center;
+}
+
+.arrow.rotate{
+  transform: rotate(180deg);
+}
+
+.arrow:hover{
+  color: blue;
+}
+.arrow:active{
+  color:lightblue;
+}
+.arrowOp {
+  opacity: 0;
+}
+.arrowOp.show {
+  transition: opacity 0.4s ease, transform 0.25s ease;
+  opacity: 1;
+}

@@ -16,23 +16,36 @@
   </div>
 =======
   <button class="sideBar_button" (click)="toggleSideBar()">
-    {{ isOpen ? '◀' : '▶' }}
+    {{ isOpen ? "◀" : "▶" }}
   </button>
 
-   <ul>
+  <ul>
     <li>
-      <a [routerLink]="['/dashboard']" routerLinkActive="active" class="menu-link">
+      <a
+        [routerLink]="['/dashboard']"
+        routerLinkActive="active"
+        class="menu-link"
+      >
         <i class="pi pi-chart-bar"></i>
         <span class="label">Dashboard</span>
         <span class="tooltip">Dashboard</span>
       </a>
     </li>
     <li>
-      <a style="cursor: pointer" class="menu-link">
+      <a
+        style="cursor: pointer"
+        class="menu-link"
+        (click)="toggleStudentMenu()"
+      >
         <i class="pi pi-users"></i>
-        <span class="label">Student</span>
+        <p class="label">Student</p>
+        <span class="arrow arrowOp" [class.rotate]="studentMenuOpen" [class.show]="isOpen">▼</span>
         <span class="tooltip">Student</span>
       </a>
+      <ul class="submenu" [class.show]="studentMenuOpen && isOpen">
+        <li><a routerLink="/student-entry">Student Entry</a></li>
+        <li><a routerLink="/student-list">Student List</a></li>
+      </ul>
     </li>
     <li>
       <a style="cursor: pointer" class="menu-link">
