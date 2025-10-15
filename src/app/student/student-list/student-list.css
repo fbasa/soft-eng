@@ -84,10 +84,10 @@
 }
 
 p-table {
-  width: 98%;           /* instead of 100% */
+  width: 95%;           
   margin: 0 auto;       
   font-size: 16px;
-  table-layout: fixed;  /* stops stretching based on text length */
+  table-layout: fixed;  
 }
 
 :host ::ng-deep .p-datatable-thead > tr > th {
@@ -156,10 +156,9 @@ p-table {
   white-space: nowrap;
 }
 
-/* make sure header text and icon stay in one line */
 :host ::ng-deep .p-sortable-column .p-sortable-column-icon {
   position: static;
-  width: 1em; /* fixed width to stop movement */
+  width: 1em;
   height: 1em;
   display: inline-block;
   line-height: 1;
@@ -169,12 +168,10 @@ p-table {
   vertical-align: middle;
 }
 
-/* optional: keep icon always visible, dim when inactive */
 :host ::ng-deep .p-sortable-column:not(.p-highlight) .p-sortable-column-icon {
   opacity: 0.4;
 }
 
-/* small tweak for consistent hover alignment */
 :host ::ng-deep .p-sortable-column:hover .p-sortable-column-icon {
   opacity: 0.8;
 }
