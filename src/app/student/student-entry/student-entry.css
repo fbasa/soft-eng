@@ -1,0 +1,273 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #0f0f0f;
+  padding: 20px 10px; 
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.form-container {
+  background-color: #1a1a1a; /* Dark background matching site theme */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+  padding: 20px;
+  max-width: 850px;
+  width: 100%;
+  margin: 0 auto; 
+  color: #e0e0e0; 
+  /* Removed:  no internal scroll */
+  scroll-behavior: smooth; 
+  /* Removed scrollbar hiding - not needed for page scroll */
+  position: relative; /* Ensure container controls positioning */
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Hide any potential upper-left icons explicitly */
+.form-header i,
+:host ::ng-deep .pi { /* PrimeNG icons */
+  display: none !important; /* Remove if this is the culprit */
+}
+
+.form-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff; 
+  margin: 0;
+  flex: 1; 
+}
+
+.add-multiple-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+.add-multiple-checkbox input[type="checkbox"] {
+  accent-color: #4f46e5; 
+  width: 16px;
+  height: 16px;
+}
+
+.add-multiple-checkbox label {
+  margin: 0;
+  cursor: pointer;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+p-datepicker {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  background-color: #222; 
+  color: #fff; 
+  box-sizing: border-box;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #888; 
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+p-datepicker:focus-within {
+  outline: none;
+  border-color: #6366f1; 
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  background-color: #2a2a2a; 
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.full-width textarea {
+  resize: vertical;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 10px; 
+  padding-top: 8px; 
+  border-top: 1px solid #333; 
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  background-color: #333; 
+  color: #fff; 
+  min-height: 40px;
+}
+
+.btn-primary {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #4338ca;
+}
+
+.btn-secondary {
+  background-color: #444;
+  color: #e0e0e0;
+}
+
+.btn-secondary:hover {
+  background-color: #555;
+}
+
+.form-note {
+  font-size: 13px;
+  color: #9ca3af; 
+  margin-top: 4px;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 4px;
+  background-color: #2a1a1a; 
+  padding: 3px 6px;
+  border-radius: 4px;
+  border-left: 3px solid #ef4444;
+}
+
+.required {
+  color: #ef4444;
+  font-weight: 700;
+  font-size: 1.1em;
+  margin-left: 2px;
+}
+
+/* Responsive: Tighter on mobile, ensures full visibility when scrolling */
+@media (max-width: 900px) {
+  :host {
+    padding: 15px 10px; 
+  }
+
+  .form-container {
+    padding: 15px; 
+    border-radius: 8px; 
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .form-header h3 {
+    font-size: 18px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:host ::ng-deep p-datepicker {
+  background-color: #222 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+:host ::ng-deep p-datepicker .p-datepicker-header {
+  background-color: #333 !important;
+  color: #fff !important;
+}
+
+:host ::ng-deep p-datepicker table td {
+  background-color: #222 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+:host ::ng-deep p-datepicker table td.p-highlight {
+  background-color: #4f46e5 !important;
+  color: #fff !important;
+}
+
+:host ::ng-deep p-datepicker table td:hover {
+  background-color: #555 !important;
+}
+
+:host ::ng-deep .p-datepicker-trigger {
+  color: #4f46e5;
+}
+
+:host ::ng-deep .p-toast {
+  background-color: #222 !important;
+  color: #fff !important;
+  border: 0px solid #444 !important;
+}
+
+

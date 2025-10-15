@@ -1,9 +1,13 @@
-/* Full-screen app setup with solid background and scrolling */
-html, body {
+
+ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh; /* Use vh for full viewport, prevents height mismatches */
-  overflow:hidden;
-
+  height: 100%; /* asta pod ni */
+  scroll-behavior: smooth; 
+  overflow-y: auto;
+}
+html {
+  overflow: hidden;  /* ADD: Prevents scrollbar on <html> */
+  height: 100%;      /* ADD: ambot ug deleton kay mawa ag scrollbar */
 }

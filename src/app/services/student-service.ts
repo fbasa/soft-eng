@@ -3,17 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Student {
-  id?: string;
+  id?: number;
   firstName: string;
   lastName: string;
-  email: string;
-  phone?: string;
+  emailAddress: string;
+  phoneNumber?: string;
   dob: string;
   gender?: string;
   school: string;
+  schoolYear: string;
   yearSemester: string;
-  program: string;
-  address?: string;
+  programClass: string;
+  homeAddress?: string;
   emergencyContact: string;
   emergencyPhone: string;
   notes?: string;
@@ -25,11 +26,18 @@ export interface Student {
   providedIn: 'root',
 })
 export class StudentService {
-  private apiUrl = 'https://fbasa.bsite.net/api/students';
-  constructor(private http: HttpClient) {}
-  GetStudents() {}
+  private apiUrl = 'https://fbasa.bsite.net/api/v1/Students';
 
-  GetStudentById(id: number) {}
+  constructor(private http: HttpClient) {}
+  
+  GetStudents(page: number = 1, size: number = 50): Observable<any> {
+    let url = `${this.apiUrl}?page=${page}&size=${size}`;
+    return this.http.get<any>(url);
+  }
+
+  GetStudentById(id: number): Observable<Student> {
+    return this.http.get<Student>(`${this.apiUrl}/id?Id=${id}`);
+  }
 
   AddStudent(student: Student): Observable<Student> {
     const payload = { ...student };
@@ -38,5 +46,11 @@ export class StudentService {
     return this.http.post<Student>(this.apiUrl, payload);
   }
 
-  UpdateStudent(student: any) {}
+  UpdateStudent(id: number, studentData: Student): Observable<Student> {
+    return this.http.put<Student>(`${this.apiUrl}`, studentData);
+  }
+
+  DeleteStudent(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}?Id=${id}`);
+  }
 }
