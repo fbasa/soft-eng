@@ -53,4 +53,10 @@ export class StudentService {
   DeleteStudent(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}?Id=${id}`);
   }
+  GetGender(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/Genders`);
+  } //Sir this is not working kani sila hhuhuhuhuhuh
+  GetSchool(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/Schools`);
+  }
 }
