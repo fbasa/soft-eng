@@ -27,6 +27,7 @@ export interface Student {
 })
 export class StudentService {
   private apiUrl = 'https://fbasa.bsite.net/api/v1/Students';
+  private apiShared = 'https://fbasa.bsite.net/api/v1/Shared';
 
   constructor(private http: HttpClient) {}
   
@@ -54,9 +55,9 @@ export class StudentService {
     return this.http.delete(`${this.apiUrl}?Id=${id}`);
   }
   GetGender(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/Genders`);
-  } //Sir this is not working kani sila hhuhuhuhuhuh
+    return this.http.get<string[]>(`${this.apiShared}/Genders`);
+  } //working na :3
   GetSchool(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/Schools`);
+    return this.http.get<string[]>(`${this.apiShared}/Schools`);
   }
 }
