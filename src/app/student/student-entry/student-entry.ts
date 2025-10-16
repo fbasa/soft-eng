@@ -42,16 +42,10 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   minDate = new Date(1900, 0, 1); // Earliest DOB
   maxDate = new Date(); // No future dates
 
-  schools = ['High School', 'College', 'University', 'Other'];
-  yearSemesters = [ '1st', '2nd'];
-  programs = [
-    'Computer Science',
-    'Engineering',
-    'Business Administration',
-    'Arts & Humanities',
-    'Natural Sciences',
-  ];
-  genders = ['', 'Male', 'Female'];
+  schools: string[] = [];
+  yearSemesters: string[]= [];
+  programs: string[] = [];
+  genders: string[] = [];
 
   id: number = 0; // For edit mode
 
@@ -86,6 +80,16 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   }
 
   ngOnInit(): void {
+    this.studentService.GetGender().subscribe({
+      next: (data) => {this.genders = data;},
+      error: (err) => console.error('❌ Error fetching', err),
+    });
+
+    this.studentService.GetSchool().subscribe({
+      next: (data) => {this.schools = data;},
+      error: (err) => console.error('❌ Error fetching', err),
+    });
+
     if (!this.isEditMode) return;
 
     // Bind form with existing student data (full population)
