@@ -60,4 +60,10 @@ export class StudentService {
   GetSchool(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiShared}/Schools`);
   }
+  GetSemester(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiShared}/Semesters`);
+  }
+  GetProgram(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiShared}/Programs`);
+  }
 }

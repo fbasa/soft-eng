@@ -90,6 +90,16 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       error: (err) => console.error('❌ Error fetching', err),
     });
 
+    this.studentService.GetSemester().subscribe({
+    next: (data) => { this.yearSemesters = data; },
+    error: (err) => console.error('❌ Error fetching semesters', err),
+    });
+
+     this.studentService.GetProgram().subscribe({
+    next: (data) => { this.programs = data; },
+    error: (err) => console.error('❌ Error fetching programs', err),
+    });
+
     if (!this.isEditMode) return;
 
     // Bind form with existing student data (full population)
