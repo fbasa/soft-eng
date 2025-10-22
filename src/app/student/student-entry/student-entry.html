@@ -113,8 +113,9 @@
       <div class="form-group">
         <label for="gender">Gender</label>
         <select id="gender" formControlName="gender">
-          <option *ngFor="let gender of genders" [value]="gender">
-            {{ gender || "Select gender" }}
+          <option value="" disabled selected>Select Gender</option>
+          <option *ngFor="let gender of genders" [value]="gender.id">
+            {{ gender.name }}
           </option>
         </select>
       </div>
@@ -142,9 +143,9 @@
       <div class="form-group">
         <label for="yearSemester"> Semester <span class="required">*</span></label>
         <select id="yearSemester" formControlName="yearSemester">
-          <option value="">Select Semester</option>
-          <option *ngFor="let ys of yearSemesters" [value]="ys">
-            {{ ys }}
+          <option value="" disabled selected>Select Semester</option>
+          <option *ngFor="let ys of yearSemesters" [value]="ys.id">
+            {{ ys.name }}
           </option>
         </select>
         <div
@@ -161,9 +162,9 @@
       <div class="form-group">
         <label for="program">Program/Class <span class="required">*</span></label>
         <select id="program" formControlName="program">
-          <option value="">Select program</option>
-          <option *ngFor="let program of programs" [value]="program">
-            {{ program }}
+          <option value="" disabled selected>Select program</option>
+          <option *ngFor="let program of programs" [value]="program.id">
+            {{ program.name }}
           </option>
         </select>
         <div

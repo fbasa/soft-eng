@@ -12,7 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api'; 
 import { finalize } from 'rxjs/operators';
 import { Router, CanDeactivate, ActivatedRoute } from '@angular/router';
-import { Student, StudentService } from '../../services/student-service';
+import { Student, StudentService, Shared } from '../../services/student-service';
 export interface CanComponentDeactivate {
   canDeactivate: () => boolean;
 }
@@ -43,9 +43,9 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   maxDate = new Date(); // No future dates
 
   schools: string[] = [];
-  yearSemesters: string[]= [];
-  programs: string[] = [];
-  genders: string[] = [];
+  yearSemesters: Shared[]= [];
+  programs: Shared[] = [];
+  genders: Shared[] = [];
 
   id: number = 0; // For edit mode
 
