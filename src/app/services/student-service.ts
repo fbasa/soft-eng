@@ -22,12 +22,17 @@ export interface Student {
   createdAt?: Date;
 }
 
+export interface Shared {
+  id: number;
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class StudentService {
   private apiUrl = 'https://fbasa.bsite.net/api/v1/Students';
-  private apiShared = 'https://fbasa.bsite.net/api/v1/Shared';
+  private apiShared = 'https://localhost:7281/api/v1/Shared';
 
   constructor(private http: HttpClient) {}
   
@@ -54,16 +59,16 @@ export class StudentService {
   DeleteStudent(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}?Id=${id}`);
   }
-  GetGender(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiShared}/Genders`);
+  GetGender(): Observable<Shared[]> {
+    return this.http.get<Shared[]>(`${this.apiShared}/items?Type=gender`);
   } //working na :3
   GetSchool(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiShared}/Schools`);
   }
-  GetSemester(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiShared}/Semesters`);
+  GetSemester(): Observable<Shared[]> {
+    return this.http.get<Shared[]>(`${this.apiShared}/items?Type=semester`);
   }
-  GetProgram(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiShared}/Programs`);
+  GetProgram(): Observable<Shared[]> {
+    return this.http.get<Shared[]>(`${this.apiShared}/items?Type=program`);
   }
 }
