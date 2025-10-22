@@ -32,7 +32,7 @@ export interface Shared {
 })
 export class StudentService {
   private apiUrl = 'https://fbasa.bsite.net/api/v1/Students';
-  private apiShared = 'https://localhost:7281/api/v1/Shared';
+  private apiShared = 'https://fbasa.bsite.net/api/v1/Shared';
 
   constructor(private http: HttpClient) {}
   
