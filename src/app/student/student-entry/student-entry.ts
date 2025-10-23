@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  HostListener,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,13 +13,18 @@ import {
   ReactiveFormsModule,
   FormsModule,
 } from '@angular/forms';
-import { CommonModule } from '@angular/common'; 
-import { DatePickerModule } from 'primeng/datepicker'; 
-import { ToastModule } from 'primeng/toast'; 
-import { MessageService } from 'primeng/api'; 
+import { CommonModule } from '@angular/common';
+import { DatePickerModule } from 'primeng/datepicker';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { finalize } from 'rxjs/operators';
 import { Router, CanDeactivate, ActivatedRoute } from '@angular/router';
-import { Student, StudentService, Shared } from '../../services/student-service';
+import {
+  Student,
+  StudentService,
+  Shared,
+} from '../../services/student-service';
+import { forkJoin } from 'rxjs';
 export interface CanComponentDeactivate {
   canDeactivate: () => boolean;
 }
@@ -24,16 +36,16 @@ export interface CanComponentDeactivate {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule, 
-    DatePickerModule, 
+    FormsModule,
+    DatePickerModule,
     ToastModule,
   ],
   standalone: true,
-  providers: [MessageService], 
+  providers: [MessageService],
 })
 export class StudentEntry implements OnInit, CanComponentDeactivate {
   @Input() editId?: string;
-  @ViewChild('firstNameInput') firstNameInput!: ElementRef; 
+  @ViewChild('firstNameInput') firstNameInput!: ElementRef;
   studentForm: FormGroup;
   isEditMode = false;
   isSubmitting = false;
@@ -43,9 +55,10 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   maxDate = new Date(); // No future dates
 
   schools: string[] = [];
-  yearSemesters: Shared[]= [];
+  yearSemesters: Shared[] = [];
   programs: Shared[] = [];
   genders: Shared[] = [];
+  schoolYears: Shared[] = [];
 
   id: number = 0; // For edit mode
 
@@ -57,7 +70,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
     private route: ActivatedRoute
   ) {
     // Capture query param id from the URL (fix: convert to number)
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.id = +params['id'] || 0; // Safe conversion to number
       this.isEditMode = !!this.id; // True if id > 0
     });
@@ -67,12 +80,12 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: [''],
-      dob: [null, Validators.required], 
+      dob: [null, Validators.required],
       gender: [''],
-      school: ['', Validators.required],
+      schoolYear: ['', Validators.required],
       yearSemester: ['', Validators.required],
       program: ['', Validators.required],
-      address: ['',Validators.required],
+      address: ['', Validators.required],
       emergencyContact: ['', Validators.required],
       emergencyPhone: ['', Validators.required],
       notes: [''],
@@ -80,46 +93,68 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
   }
 
   ngOnInit(): void {
-    this.studentService.GetGender().subscribe({
-      next: (data) => {this.genders = data;},
-      error: (err) => console.error('❌ Error fetching', err),
-    });
+    // Load all dropdown data first
+    const gender$ = this.studentService.GetGender();
+    const schoolYear$ = this.studentService.GetSchoolYear();
+    const semester$ = this.studentService.GetSemester();
+    const program$ = this.studentService.GetProgram();
 
-    this.studentService.GetSchool().subscribe({
-      next: (data) => {this.schools = data;},
-      error: (err) => console.error('❌ Error fetching', err),
-    });
+    // Combine all calls together
+    forkJoin({
+      genders: gender$,
+      schoolYears: schoolYear$,
+      yearSemesters: semester$,
+      programs: program$,
+    }).subscribe({
+      next: (res) => {
+        this.genders = res.genders;
+        this.schoolYears = res.schoolYears;
+        this.yearSemesters = res.yearSemesters;
+        this.programs = res.programs;
 
-    this.studentService.GetSemester().subscribe({
-    next: (data) => { this.yearSemesters = data; },
-    error: (err) => console.error('❌ Error fetching semesters', err),
-    });
+        // If editing, now that dropdowns are loaded, patch the form
+        if (this.isEditMode) {
+          this.studentService
+            .GetStudentById(this.id)
+            .subscribe((student: Student) => {
+              console.log('📦 Student from API:', student);
 
-     this.studentService.GetProgram().subscribe({
-    next: (data) => { this.programs = data; },
-    error: (err) => console.error('❌ Error fetching programs', err),
-    });
+              const dobDate = student.dob ? new Date(student.dob) : null;
 
-    if (!this.isEditMode) return;
+              // Find matching IDs by comparing names
+              const selectedGender =
+                this.genders.find((g) => g.name === student.gender)?.id || '';
+              const selectedYear =
+                this.schoolYears.find((sy) => sy.name === student.schoolYear)
+                  ?.id || '';
+              const selectedSemester =
+                this.yearSemesters.find(
+                  (ys) => ys.name === student.yearSemester
+                )?.id || '';
+              const selectedProgram =
+                this.programs.find((p) => p.name === student.programClass)
+                  ?.id || '';
 
-    // Bind form with existing student data (full population)
-    this.studentService.GetStudentById(this.id).subscribe((student: Student) => {
-      const dobDate = student.dob ? new Date(student.dob) : null;
-      this.studentForm.patchValue({
-        firstName: student.firstName,
-        lastName: student.lastName,
-        email: student.emailAddress,
-        phone: student.phoneNumber,
-        dob: dobDate, 
-        gender: student.gender,
-        school: student.school,
-        yearSemester: student.yearSemester,
-        program: student.programClass,
-        address: student.homeAddress,
-        emergencyContact: student.emergencyContact,
-        emergencyPhone: student.emergencyPhone,
-        notes: student.notes,
-      });
+              // Patch form values with found IDs
+              this.studentForm.patchValue({
+                firstName: student.firstName,
+                lastName: student.lastName,
+                email: student.emailAddress,
+                phone: student.phoneNumber,
+                dob: dobDate,
+                gender: selectedGender,
+                schoolYear: selectedYear,
+                yearSemester: selectedSemester,
+                program: selectedProgram,
+                address: student.homeAddress,
+                emergencyContact: student.emergencyContact,
+                emergencyPhone: student.emergencyPhone,
+                notes: student.notes,
+              });
+            });
+        }
+      },
+      error: (err) => console.error('❌ Error loading dropdown data:', err),
     });
   }
 
@@ -130,7 +165,6 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       this.markAllFieldsTouched();
       return;
     }
-
 
     if (this.isSubmitting) return; // Prevent duplicate clicks
 
@@ -150,7 +184,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
       dob: dobString, // Formatted string
       gender: this.studentForm.value.gender,
       school: this.studentForm.value.school,
-      schoolYear: '2025',
+      schoolYear: this.studentForm.value.schoolYear,
       yearSemester: this.studentForm.value.yearSemester,
       programClass: this.studentForm.value.program,
       homeAddress: this.studentForm.value.address,
@@ -162,40 +196,39 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
 
     // Always use AddStudent (for now; edit mode creates new—implement UpdateStudent(id, student) in service for proper edit)
     // TODO: For full edit support: const request = this.isEditMode ? this.studentService.UpdateStudent(this.id, studentData) : this.studentService.AddStudent(studentData);
-    const request = this.isEditMode 
+    const request = this.isEditMode
       ? this.studentService.UpdateStudent(this.id, studentData)
       : this.studentService.AddStudent(studentData); // Observable<Student> - ensures pipe works
 
-    request
-      .pipe(finalize(() => (this.isSubmitting = false)))
-      .subscribe({
-        next: (res: any) => { // Explicit type to fix implicit any
-          console.log('✅ Student saved successfully', res);
-          this.showToast('success', this.isEditMode ? 'Student updated!' : 'Student saved.'); // Always show toast
+    request.pipe(finalize(() => (this.isSubmitting = false))).subscribe({
+      next: (res: any) => {
+        // Explicit type to fix implicit any
+        console.log('✅ Student saved successfully', res);
+        this.showToast(
+          'success',
+          this.isEditMode ? 'Student updated!' : 'Student saved.'
+        ); // Always show toast
 
-         
-          this.studentForm.reset({ dob: null });
+        this.studentForm.reset({ dob: null });
 
-          if (this.addMultiple && !this.isEditMode) {
-            
-            setTimeout(() => {
-              this.firstNameInput.nativeElement.focus();
-            }, 100); 
-          } else {
-            setTimeout(() => {
-              this.router.navigate(['/studentlist']);
-            }, 300);
-          }
-        },
-        error: (err: any) => { 
-          console.error('❌ Save student error:', err);
-          this.showToast('error', 'Failed to save student. Please try again.');
-          alert('Failed to save student. Please try again.');
-        },
-      });
+        if (this.addMultiple && !this.isEditMode) {
+          setTimeout(() => {
+            this.firstNameInput.nativeElement.focus();
+          }, 100);
+        } else {
+          setTimeout(() => {
+            this.router.navigate(['/studentlist']);
+          }, 300);
+        }
+      },
+      error: (err: any) => {
+        console.error('❌ Save student error:', err);
+        this.showToast('error', 'Failed to save student. Please try again.');
+        alert('Failed to save student. Please try again.');
+      },
+    });
   }
 
-  
   private formatDateToString(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -203,7 +236,6 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
     return `${year}-${month}-${day}`;
   }
 
-  
   private showToast(severity: string, summary: string, detail?: string): void {
     this.messageService.add({
       severity,
@@ -233,7 +265,7 @@ export class StudentEntry implements OnInit, CanComponentDeactivate {
     }
     this.studentForm.reset({ dob: null });
     this.isEditMode = false;
-    this.addMultiple = false; 
+    this.addMultiple = false;
     this.editId = undefined;
   }
 

@@ -62,13 +62,14 @@ export class StudentService {
   GetGender(): Observable<Shared[]> {
     return this.http.get<Shared[]>(`${this.apiShared}/items?Type=gender`);
   } //working na :3
-  GetSchool(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiShared}/Schools`);
+   GetSchoolYear(): Observable<Shared[]> {
+    return this.http.get<Shared[]>(`${this.apiShared}/items?Type=schoolyear`);
   }
   GetSemester(): Observable<Shared[]> {
     return this.http.get<Shared[]>(`${this.apiShared}/items?Type=semester`);
   }
   GetProgram(): Observable<Shared[]> {
     return this.http.get<Shared[]>(`${this.apiShared}/items?Type=program`);
-  }
+  } 
+ 
 }
