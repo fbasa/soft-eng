@@ -1,7 +1,7 @@
 .main-layout {
   display: flex;
-  min-height: calc(100vh - 64px);
-  margin-top: 64px;
+  min-height: calc(100vh - 60px); /* Account for topbar height */
+  margin-top: 60px; /* Push content below sticky topbar */
 }
 
 app-side-bar {
@@ -9,10 +9,11 @@ app-side-bar {
   flex-shrink: 0;
   position: fixed;
   left: 0;
-  top: 64px;
-  height: calc(100vh - 64px);
-  z-index: 100;
-  pointer-events: auto; /* Enable clicks on sidebar */
+  top: 60px; /* Start below topbar */
+  height: calc(100vh - 60px); /* Full height minus topbar */
+  z-index: 50;
+  pointer-events: auto;
+  overflow-y: auto;
 }
 
 .content {
@@ -20,11 +21,21 @@ app-side-bar {
   margin-left: 250px;
   padding: 2rem;
   background-color: #0f0f0f;
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - 60px);
   overflow-y: auto;
-  pointer-events: auto; /* Enable clicks on content */
+  pointer-events: auto;
 }
 
 .footer {
   margin-left: 250px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure topbar is always on top */
+app-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: block;
 }
