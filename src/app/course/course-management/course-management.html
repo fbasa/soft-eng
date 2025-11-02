@@ -1,1 +1,315 @@
-<p>course-management works!</p>
+<div class="management-container">
+  <div class="header">
+    <h1>Course Management</h1>
+    <p class="subtitle">Manage courses, enrollment, and capacity</p>
+  </div>
+
+  <!-- Search and Actions -->
+  <div class="controls">
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        placeholder="Search courses, instructors, codes..."
+        class="search-input"
+      />
+      <span class="search-icon">🔍</span>
+    </div>
+    <button class="btn-add" (click)="openAddDialog()">
+      <i class="pi pi-plus"></i>
+      Add New Course
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="spinner-overlay" *ngIf="loading">
+    <p-progress-spinner animationDuration=".5s" [style]="{width: '50px', height: '50px'}"/>
+  </div>
+
+  <!-- Course Table -->
+  <div class="table-wrapper" *ngIf="!loading">
+    <p-table 
+      [value]="filteredCourses" 
+      [paginator]="true" 
+      [rows]="10" 
+      [showCurrentPageReport]="true"
+      sortMode="single"
+      class="course-table"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="courseCode" style="width: 12%">
+            Course Code <p-sortIcon field="courseCode"></p-sortIcon>
+          </th>
+          <th pSortableColumn="courseName" style="width: 20%">
+            Course Name <p-sortIcon field="courseName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="instructor" style="width: 15%">
+            Instructor <p-sortIcon field="instructor"></p-sortIcon>
+          </th>
+          <th style="width: 12%">Schedule</th>
+          <th style="width: 12%">Capacity</th>
+          <th style="width: 12%">Status</th>
+          <th style="width: 12%">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-course let-i="rowIndex">
+        <tr>
+          <td>
+            <span class="course-code-badge">{{ course.courseCode }}</span>
+          </td>
+          <td>
+            <div class="course-info">
+              <strong>{{ course.courseName }}</strong>
+              <p class="course-desc" pTooltip="{{course.description}}" tooltipPosition="right">
+                {{ course.description?.length > 40 ? (course.description | slice:0:40) + '...' : course.description }}
+              </p>
+            </div>
+          </td>
+          <td>{{ course.instructor }}</td>
+          <td>{{ course.schedule }}</td>
+          <td>
+            <span class="capacity-text">
+              {{ course.enrolled }} / {{ course.capacity }}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(course)">
+              {{ getStatusText(course) }}
+            </span>
+          </td>
+          <td>
+            <div class="action-menu">
+              <button class="btn action" (click)="popover.toggle($event)">
+                <i class="pi pi-ellipsis-v"></i>
+              </button>
+
+              <p-popover #popover>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item" (click)="openEditDialog(course)">
+                    <i class="pi pi-pencil"></i> Edit
+                  </button>
+                  <button class="dropdown-item delete" (click)="confirmDelete(course)">
+                    <i class="pi pi-trash"></i> Delete
+                  </button>
+                </div>
+              </p-popover>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="empty-message">
+            <div class="empty-state">
+              <div class="empty-icon">📚</div>
+              <h3>No courses found</h3>
+              <p>Try adjusting your search criteria or add a new course</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Add Course Dialog -->
+  <p-dialog 
+    header="Add New Course" 
+    [(visible)]="showAddDialog"
+    [modal]="true"
+    [style]="{width: '600px'}"
+    [closable]="true"
+    (onHide)="closeDialogs()"
+    styleClass="course-dialog"
+  >
+    <div class="dialog-content">
+      <form class="course-form">
+        <div class="form-group">
+          <label>Course Code *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="courseForm.courseCode"
+            name="courseCode"
+            placeholder="e.g., CS305"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Course Name *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="courseForm.courseName"
+            name="courseName"
+            placeholder="e.g., Software Engineering"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Instructor *</label>
+            <input 
+              type="text" 
+              [(ngModel)]="courseForm.instructor"
+              name="instructor"
+              placeholder="e.g., John Doe"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Capacity *</label>
+            <input 
+              type="number" 
+              [(ngModel)]="courseForm.capacity"
+              name="capacity"
+              min="1"
+              placeholder="e.g., 30"
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Schedule *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="courseForm.schedule"
+            name="schedule"
+            placeholder="e.g., MWF 9:00-10:00 AM"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea 
+            [(ngModel)]="courseForm.description"
+            name="description"
+            rows="3"
+            placeholder="Course description..."
+            class="form-textarea"
+          ></textarea>
+        </div>
+      </form>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="dialog-footer">
+        <button class="btn btn-cancel" (click)="closeDialogs()">
+          Cancel
+        </button>
+        <button class="btn btn-save" (click)="saveCourse()">
+          <i class="pi pi-check"></i>
+          Add Course
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Edit Course Dialog -->
+  <p-dialog 
+    header="Edit Course" 
+    [(visible)]="showEditDialog"
+    [modal]="true"
+    [style]="{width: '600px'}"
+    [closable]="true"
+    (onHide)="closeDialogs()"
+    styleClass="course-dialog"
+  >
+    <div class="dialog-content">
+      <form class="course-form">
+        <div class="form-group">
+          <label>Course Code *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="courseForm.courseCode"
+            name="courseCode"
+            placeholder="e.g., CS305"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Course Name *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="courseForm.courseName"
+            name="courseName"
+            placeholder="e.g., Software Engineering"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Instructor *</label>
+            <input 
+              type="text" 
+              [(ngModel)]="courseForm.instructor"
+              name="instructor"
+              placeholder="e.g., John Doe"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Capacity *</label>
+            <input 
+              type="number" 
+              [(ngModel)]="courseForm.capacity"
+              name="capacity"
+              min="1"
+              placeholder="e.g., 30"
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Schedule *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="courseForm.schedule"
+            name="schedule"
+            placeholder="e.g., MWF 9:00-10:00 AM"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea 
+            [(ngModel)]="courseForm.description"
+            name="description"
+            rows="3"
+            placeholder="Course description..."
+            class="form-textarea"
+          ></textarea>
+        </div>
+      </form>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="dialog-footer">
+        <button class="btn btn-cancel" (click)="closeDialogs()">
+          Cancel
+        </button>
+        <button class="btn btn-save" (click)="saveCourse()">
+          <i class="pi pi-check"></i>
+          Save Changes
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Confirmation Dialog -->
+  <p-confirmDialog></p-confirmDialog>
+  
+  <!-- Toast Notifications -->
+  <p-toast></p-toast>
+</div>

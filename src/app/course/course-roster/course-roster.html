@@ -1,1 +1,111 @@
-<p>course-roster works!</p>
+<div class="roster-container">
+  <div class="header">
+    <h1>Course Roster</h1>
+    <p class="subtitle">View enrolled students for each course</p>
+  </div>
+
+  <!-- Course Selection -->
+  <div class="course-selection">
+    <label for="courseSelect">Select Course:</label>
+    <select 
+      id="courseSelect"
+      [(ngModel)]="selectedCourseId"
+      (change)="onCourseChange()"
+      class="course-select"
+    >
+      <option value="">-- Select a course --</option>
+      <option *ngFor="let course of courses" [value]="course.id">
+        {{ course.courseCode }} - {{ course.courseName }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading roster...</p>
+  </div>
+
+  <!-- Course Info and Roster -->
+  <div class="roster-content" *ngIf="!loading && selectedCourse">
+    <!-- Course Information Card -->
+    <div class="course-info-card">
+      <div class="info-header">
+        <div class="course-code-badge">{{ selectedCourse.courseCode }}</div>
+        <div class="enrollment-status">
+          {{ selectedCourse.enrolled }} / {{ selectedCourse.capacity }} enrolled
+        </div>
+      </div>
+      <h2 class="course-title">{{ selectedCourse.courseName }}</h2>
+      <div class="course-meta">
+        <div class="meta-item">
+          <span class="meta-label">Instructor:</span>
+          <span class="meta-value">{{ selectedCourse.instructor }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Schedule:</span>
+          <span class="meta-value">{{ selectedCourse.schedule }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Available Seats:</span>
+          <span class="meta-value" [ngClass]="getSeatStatusClass()">
+            {{ getAvailableSeats() }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roster Table -->
+    <div class="roster-table-wrapper">
+      <div class="table-header">
+        <h3>Enrolled Students</h3>
+        <span class="student-count">{{ enrollments.length }} student(s)</span>
+      </div>
+
+      <p-table 
+        *ngIf="enrollments.length > 0"
+        [value]="enrollments" 
+        [paginator]="true" 
+        [rows]="10" 
+        [showCurrentPageReport]="true"
+        class="roster-table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 5%">#</th>
+            <th style="width: 20%">Student ID</th>
+            <th style="width: 20%">Student Name</th>
+            <th style="width: 25%">Email</th>
+            <th style="width: 15%">Program</th>
+            <th style="width: 15%">Enrollment Date</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-enrollment let-i="rowIndex">
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ enrollment.studentId }}</td>
+            <td>{{ getStudentName(enrollment.studentId) }}</td>
+            <td>{{ getStudentEmail(enrollment.studentId) }}</td>
+            <td>{{ getStudentProgram(enrollment.studentId) }}</td>
+            <td>{{ enrollment.enrollmentDate | date: 'mediumDate' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <!-- Empty State -->
+      <div class="empty-roster" *ngIf="enrollments.length === 0">
+        <div class="empty-icon">📝</div>
+        <h3>No students enrolled</h3>
+        <p>This course has no active enrollments yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Initial State -->
+  <div class="initial-state" *ngIf="!loading && !selectedCourse">
+    <div class="initial-icon">📚</div>
+    <h3>Select a course to view roster</h3>
+    <p>Choose a course from the dropdown above to see enrolled students</p>
+  </div>
+</div>

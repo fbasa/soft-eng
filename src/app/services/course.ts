@@ -83,6 +83,12 @@ export class CourseService {
   private enrollmentsSubject = new BehaviorSubject<Enrollment[]>([]);
 
   constructor() {
+    // Load courses from localStorage if available
+    const savedCourses = localStorage.getItem('courses');
+    if (savedCourses) {
+      this.courses = JSON.parse(savedCourses);
+    }
+    
     // Load enrollments from localStorage if available
     const savedEnrollments = localStorage.getItem('enrollments');
     if (savedEnrollments) {
@@ -183,6 +189,11 @@ export class CourseService {
     return of(roster);
   }
 
+  // Save courses to localStorage
+  private saveCourses(): void {
+    localStorage.setItem('courses', JSON.stringify(this.courses));
+  }
+
   // Save enrollments to localStorage
   private saveEnrollments(): void {
     localStorage.setItem('enrollments', JSON.stringify(this.enrollments));
@@ -192,5 +203,59 @@ export class CourseService {
   getAvailableSeats(courseId: string): number {
     const course = this.courses.find(c => c.id === courseId);
     return course ? course.capacity - course.enrolled : 0;
+  }
+
+  // Add a new course
+  addCourse(course: Course): Observable<{ success: boolean, message: string }> {
+    // Check if course code already exists
+    const existingCourse = this.courses.find(c => c.courseCode === course.courseCode || c.id === course.id);
+    if (existingCourse) {
+      return of({ success: false, message: 'Course with this code already exists' });
+    }
+
+    this.courses.push(course);
+    this.saveCourses();
+    return of({ success: true, message: 'Course added successfully' });
+  }
+
+  // Update a course
+  updateCourse(courseId: string, courseData: Partial<Course>): Observable<{ success: boolean, message: string }> {
+    const courseIndex = this.courses.findIndex(c => c.id === courseId);
+    if (courseIndex === -1) {
+      return of({ success: false, message: 'Course not found' });
+    }
+
+    // Check if updating to a code that already exists (excluding current course)
+    if (courseData.courseCode) {
+      const duplicateCode = this.courses.find(c => c.courseCode === courseData.courseCode && c.id !== courseId);
+      if (duplicateCode) {
+        return of({ success: false, message: 'Course code already exists' });
+      }
+    }
+
+    // Update the course
+    this.courses[courseIndex] = { ...this.courses[courseIndex], ...courseData };
+    this.saveCourses();
+    return of({ success: true, message: 'Course updated successfully' });
+  }
+
+  // Delete a course
+  deleteCourse(courseId: string): Observable<{ success: boolean, message: string }> {
+    const courseIndex = this.courses.findIndex(c => c.id === courseId);
+    if (courseIndex === -1) {
+      return of({ success: false, message: 'Course not found' });
+    }
+
+    // Check if there are any active enrollments
+    const hasEnrollments = this.enrollments.some(
+      e => e.courseId === courseId && e.status === 'active'
+    );
+    if (hasEnrollments) {
+      return of({ success: false, message: 'Cannot delete course with active enrollments' });
+    }
+
+    this.courses.splice(courseIndex, 1);
+    this.saveCourses();
+    return of({ success: true, message: 'Course deleted successfully' });
   }
 }
