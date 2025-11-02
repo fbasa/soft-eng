@@ -1,63 +1,49 @@
-<div class="sideBar" [class.collapsed]="!isOpen">
-  <button class="sideBar_button" (click)="toggleSideBar()">
-    {{ isOpen ? "◀" : "▶" }}
-  </button>
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">🎓</div>
+    <h2 class="logo-text">CollabProject</h2>
+  </div>
 
-  <ul>
-    <li>
-      <a
-        [routerLink]="['/dashboard']"
+  <nav class="nav-menu">
+    <div *ngFor="let item of menuItems" class="menu-item-wrapper">
+      <!-- Parent Menu Item (with children - no route) -->
+      <div 
+        *ngIf="item.children"
+        class="menu-item has-children"
+        [class.expanded]="item.expanded"
+        (click)="toggleMenu(item)"
+      >
+        <span class="menu-icon">{{ item.icon }}</span>
+        <span class="menu-label">{{ item.label }}</span>
+        <span class="expand-icon">
+          {{ item.expanded ? '▼' : '▶' }}
+        </span>
+      </div>
+
+      <!-- Parent Menu Item (without children - with route) -->
+      <a 
+        *ngIf="!item.children && item.route"
+        class="menu-item"
+        [routerLink]="[item.route]"
         routerLinkActive="active"
-        class="menu-link"
+        [routerLinkActiveOptions]="{ exact: true }"
       >
-        <i class="pi pi-chart-bar"></i>
-        <span class="label">Dashboard</span>
-        <span class="tooltip">Dashboard</span>
+        <span class="menu-icon">{{ item.icon }}</span>
+        <span class="menu-label">{{ item.label }}</span>
       </a>
-    </li>
-    <li>
-      <a
-        style="cursor: pointer"
-        class="menu-link"
-        (click)="toggleStudentMenu()"
-      >
-        <i class="pi pi-users"></i>
-        <p class="label">Student</p>
-        <span class="arrow arrowOp" [class.rotate]="studentMenuOpen" [class.show]="isOpen">▼</span>
-        <span class="tooltip">Student</span>
-      </a>
-      <ul class="submenu" [class.show]="studentMenuOpen && isOpen">
-        <li><a routerLink="/student-entry">Student Entry</a></li>
-        <li><a routerLink="/student-list">Student List</a></li>
-      </ul>
-    </li>
-    <li>
-      <a style="cursor: pointer" class="menu-link">
-        <i class="pi pi-receipt"></i>
-        <span class="label">Course</span>
-        <span class="tooltip">Course</span>
-      </a>
-    </li>
-    <li>
-      <a style="cursor: pointer" class="menu-link">
-        <i class="pi pi-equals"></i>
-        <span class="label">Grades</span>
-        <span class="tooltip">Grades</span>
-      </a>
-    </li>
-    <li>
-      <a style="cursor: pointer" class="menu-link">
-        <i class="pi pi-dollar"></i>
-        <span class="label">Finance</span>
-        <span class="tooltip">Finance</span>
-      </a>
-    </li>
-    <li>
-      <a style="cursor: pointer" class="menu-link">
-        <i class="pi pi-cog"></i>
-        <span class="label">Settings</span>
-        <span class="tooltip">Settings</span>
-      </a>
-    </li>
-  </ul>
-</div>
+
+      <!-- Child Menu Items (Dropdown) -->
+      <div class="submenu" *ngIf="item.children && item.expanded">
+        <a 
+          *ngFor="let child of item.children"
+          [routerLink]="child.route"
+          routerLinkActive="active"
+          class="submenu-item"
+        >
+          <span class="submenu-icon">{{ child.icon }}</span>
+          <span class="submenu-label">{{ child.label }}</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</aside>

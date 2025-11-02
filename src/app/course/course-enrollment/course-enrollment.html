@@ -1,0 +1,96 @@
+<div class="enrollment-container">
+  <div class="header">
+    <h1>Course Enrollment</h1>
+    <p class="subtitle">Browse and enroll in available courses</p>
+  </div>
+
+  <!-- Success/Error Messages -->
+  <div class="message success-message" *ngIf="showSuccessMessage">
+    <span class="message-icon">✓</span>
+    {{ message }}
+  </div>
+
+  <div class="message error-message" *ngIf="showErrorMessage">
+    <span class="message-icon">✕</span>
+    {{ message }}
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="controls">
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        placeholder="Search courses, instructors..."
+        class="search-input"
+      />
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="filter-group">
+      <label for="filter">Filter:</label>
+      <select 
+        id="filter"
+        [(ngModel)]="selectedFilter"
+        (change)="onFilterChange()"
+        class="filter-select"
+      >
+        <option value="all">All Courses</option>
+        <option value="available">Available</option>
+        <option value="full">Full</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Course Cards -->
+  <div class="courses-grid">
+    <div class="course-card" *ngFor="let course of filteredCourses">
+      <div class="card-header">
+        <div class="course-code">{{ course.courseCode }}</div>
+        <div class="status-badge" [ngClass]="getStatusClass(course)">
+          {{ getStatusText(course) }}
+        </div>
+      </div>
+
+      <div class="card-body">
+        <h3 class="course-name">{{ course.courseName }}</h3>
+        <p class="course-description">{{ course.description }}</p>
+
+        <div class="course-details">
+          <div class="detail-item">
+            <span class="detail-label">Instructor:</span>
+            <span class="detail-value">{{ course.instructor }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Schedule:</span>
+            <span class="detail-value">{{ course.schedule }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Capacity:</span>
+            <span class="detail-value">{{ course.enrolled }} / {{ course.capacity }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <button 
+          class="enroll-btn"
+          [disabled]="isEnrolled(course.id) || isFull(course)"
+          (click)="enrollInCourse(course.id)"
+        >
+          <span *ngIf="isEnrolled(course.id)">Enrolled ✓</span>
+          <span *ngIf="!isEnrolled(course.id) && isFull(course)">Course Full</span>
+          <span *ngIf="!isEnrolled(course.id) && !isFull(course)">Enroll Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredCourses.length === 0">
+    <div class="empty-icon">📚</div>
+    <h3>No courses found</h3>
+    <p>Try adjusting your search or filter criteria</p>
+  </div>
+</div>

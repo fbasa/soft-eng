@@ -1,32 +1,186 @@
 <div class="dashboard-container">
   <div class="dashboard-header">
-    <h2>Dashboard</h2>
-    <button class="btn refresh" (click)="refreshData()" [disabled]="loading">
-      Refresh
+    <h1>📊 Dashboard</h1>
+    <button class="btn-refresh" (click)="refreshData()" [disabled]="loading">
+      <i class="pi pi-refresh"></i>
+      Refresh Data
     </button>
   </div>
 
+  <!-- KPI Cards -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-content">
+        <h3>Total Enrolled</h3>
+        <p class="kpi-value">{{ totalEnrolled }}</p>
+        <span class="kpi-label">Active Enrollments</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-content">
+        <h3>Retention Rate</h3>
+        <p class="kpi-value">{{ retentionRate.toFixed(1) }}%</p>
+        <span class="kpi-label">Student Retention</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-content">
+        <h3>Average GPA</h3>
+        <p class="kpi-value">{{ avgGPA.toFixed(2) }}</p>
+        <span class="kpi-label">Overall Performance</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">👨‍🎓</div>
+      <div class="kpi-content">
+        <h3>Total Students</h3>
+        <p class="kpi-value">{{ totalStudents }}</p>
+        <span class="kpi-label">Registered Students</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 1: Enrollment Summary -->
   <div class="charts-row">
     <div class="chart-box">
-      <h3>Total Students</h3>
+      <div class="chart-header">
+        <h3>👥 Enrollment by Program</h3>
+      </div>
       <p-chart
-        type="bar"
-        [data]="totalChartData"
-        [options]="{ responsive: true, plugins: { legend: { display: false } } }"
+        type="doughnut"
+        [data]="programChartData"
+        [options]="{ 
+          responsive: true, 
+          maintainAspectRatio: true,
+          plugins: { 
+            legend: { 
+              position: 'bottom',
+              labels: { color: '#9ca3af' }
+            } 
+          } 
+        }"
       ></p-chart>
     </div>
 
     <div class="chart-box">
-      <h3>Students per Course</h3>
+      <div class="chart-header">
+        <h3>📊 Enrollment by Year Level</h3>
+      </div>
       <p-chart
         type="bar"
-        [data]="courseChartData"
-        [options]="{ responsive: true, plugins: { legend: { display: false } } }"
+        [data]="yearLevelChartData"
+        [options]="{ 
+          responsive: true, 
+          maintainAspectRatio: true,
+          plugins: { 
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { color: '#9ca3af' } },
+            x: { ticks: { color: '#9ca3af' } }
+          }
+        }"
       ></p-chart>
     </div>
   </div>
 
-  <div *ngIf="loading" class="spinner-overlay">
+  <!-- Charts Row 2: Gender & Trends -->
+  <div class="charts-row">
+    <div class="chart-box">
+      <div class="chart-header">
+        <h3>⚖️ Gender Distribution</h3>
+      </div>
+      <p-chart
+        type="pie"
+        [data]="genderChartData"
+        [options]="{ 
+          responsive: true, 
+          maintainAspectRatio: true,
+          plugins: { 
+            legend: { 
+              position: 'bottom',
+              labels: { color: '#9ca3af' }
+            } 
+          } 
+        }"
+      ></p-chart>
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-header">
+        <h3>📈 Enrollment Trends</h3>
+      </div>
+      <p-chart
+        type="line"
+        [data]="semesterTrendsData"
+        [options]="{ 
+          responsive: true, 
+          maintainAspectRatio: true,
+          plugins: { 
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { color: '#9ca3af' } },
+            x: { ticks: { color: '#9ca3af' } }
+          }
+        }"
+      ></p-chart>
+    </div>
+  </div>
+
+  <!-- Dropout Table -->
+  <div class="table-section">
+    <div class="section-header">
+      <h3>📉 Recent Dropouts/Withdrawals</h3>
+    </div>
+    <div class="table-container">
+      <p-table 
+        [value]="dropoutList" 
+        [paginator]="true" 
+        [rows]="5"
+        class="dropout-table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Course Code</th>
+            <th>Course Name</th>
+            <th>Student ID</th>
+            <th>Withdrawal Date</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-dropout>
+          <tr>
+            <td>{{ dropout.courseCode }}</td>
+            <td>{{ dropout.courseName }}</td>
+            <td>{{ dropout.studentId }}</td>
+            <td>{{ dropout.dropDate | date: 'mediumDate' }}</td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="empty-message">
+              <div class="empty-state">
+                <div class="empty-icon">✅</div>
+                <p>No recent dropouts - Great retention!</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner"></div>
     <p>Loading dashboard data...</p>
   </div>
 </div>

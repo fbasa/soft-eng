@@ -2,10 +2,7 @@
   text-align: right;     
   padding: 10px 20px;
   font-size: 14px;
-  background: #f4f4f4;    
-  color: #333;
-  position: fixed;       
-  bottom: 0;
-  right: 0;
-  width: 100%;           
+  background: #1a1a1a;    
+  color: #9ca3af;
+  border-top: 1px solid #2a2a2a;
 }
